@@ -9,9 +9,5 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 public class Exercise extends BaseEntity{
-    private Integer reps;
-    private Integer sets;
-    private Integer usedWeight;
-    private String comment;
-    private Boolean done;
+
 }
