@@ -1,12 +1,13 @@
-package com.vaszily.WorkoutPlanner.service.entities;
+package com.vaszily.WorkoutPlanner.service.entities.imp;
 
 import com.vaszily.WorkoutPlanner.model.Account;
+import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AccountService implements EntityService<Account>{
+public class AccountService implements EntityService<Account> {
     @Override
     public List<Account> getAll() {
         return null;

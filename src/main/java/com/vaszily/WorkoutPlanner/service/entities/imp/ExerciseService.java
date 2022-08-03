@@ -1,6 +1,7 @@
-package com.vaszily.WorkoutPlanner.service.entities;
+package com.vaszily.WorkoutPlanner.service.entities.imp;
 
 import com.vaszily.WorkoutPlanner.model.Exercise;
+import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
