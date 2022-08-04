@@ -9,7 +9,12 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
+
 public class Exercise extends BaseEntity{
     @ManyToOne
     private Task task;
+    public Exercise(String name, Task task){
+        this.name=name;
+        this.task=task;
+    }
 }

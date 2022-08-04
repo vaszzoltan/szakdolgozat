@@ -1,16 +1,20 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
 import com.vaszily.WorkoutPlanner.model.Exercise;
+import com.vaszily.WorkoutPlanner.repositories.ExerciseRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@AllArgsConstructor
 @Service
 public class ExerciseService implements EntityService<Exercise> {
+    private ExerciseRepo exerciseRepo;
 
     @Override
     public List<Exercise> getAll() {
-        return null;
+        return exerciseRepo.findAll();
     }
 
     @Override
@@ -25,6 +29,7 @@ public class ExerciseService implements EntityService<Exercise> {
 
     @Override
     public Exercise save(Exercise toSave) {
+        exerciseRepo.save(toSave);
         return null;
     }
 
