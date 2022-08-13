@@ -6,6 +6,7 @@ import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 @AllArgsConstructor
 @Service
@@ -19,27 +20,32 @@ public class ExerciseService implements EntityService<Exercise> {
 
     @Override
     public List<Exercise> getAllByName(String name) {
-        return null;
+        return exerciseRepo.findAllByName(name);
     }
 
     @Override
-    public Exercise getById(Long Id) {
-        return null;
+    public Exercise getById(Long id) {
+        return exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
     public Exercise save(Exercise toSave) {
-        exerciseRepo.save(toSave);
-        return null;
+        return exerciseRepo.save(toSave);
     }
 
     @Override
-    public Exercise update(Long id, Exercise toUpdate) {
-        return null;
+    public Exercise update(Long id, Exercise exercise) {
+        Exercise toUpdate = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        toUpdate.setName(exercise.getName());
+        toUpdate.setTask(exercise.getTask());
+        return exerciseRepo.save(toUpdate);
+
+
     }
 
     @Override
     public void delete(Long id) {
-
+        Exercise toDelete = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        exerciseRepo.delete(toDelete);
     }
 }
