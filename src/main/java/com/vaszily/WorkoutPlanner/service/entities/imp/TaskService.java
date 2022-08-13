@@ -1,40 +1,62 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
 import com.vaszily.WorkoutPlanner.model.Task;
+import com.vaszily.WorkoutPlanner.repositories.TaskRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class TaskService implements EntityService<Task> {
+    private TaskRepo taskRepo;
+
+    @Autowired
+    public TaskService(TaskRepo taskRepo) {
+        this.taskRepo = taskRepo;
+    }
+
     @Override
     public List<Task> getAll() {
-        return null;
+        return taskRepo.findAll();
     }
 
     @Override
     public List<Task> getAllByName(String name) {
-        return null;
+        return taskRepo.findAllByName(name);
     }
 
     @Override
-    public Task getById(Long Id) {
-        return null;
+    public Task getById(Long id) {
+        return taskRepo.findById(id).orElseThrow(EntityExistsException::new);
     }
 
     @Override
     public Task save(Task toSave) {
-        return null;
+
+        return taskRepo.save(toSave);
     }
 
     @Override
-    public Task update(Long id, Task toUpdate) {
-        return null;
+    public Task update(Long id, Task task) {
+        Task toUpdate = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        toUpdate.setComment(task.getComment());
+        toUpdate.setDone(task.getDone());
+        toUpdate.setExercises(task.getExercises());
+        toUpdate.setReps(task.getReps());
+        toUpdate.setSets(task.getSets());
+        toUpdate.setWorkout(task.getWorkout());
+        toUpdate.setName(task.getName());
+        return taskRepo.save(toUpdate);
     }
 
     @Override
     public void delete(Long id) {
+        Task toDelete = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        taskRepo.delete(toDelete);
 
     }
 }
