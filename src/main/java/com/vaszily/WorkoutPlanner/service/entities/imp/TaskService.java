@@ -45,9 +45,7 @@ public class TaskService implements EntityService<Task> {
         Task toUpdate = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
         toUpdate.setComment(task.getComment());
         toUpdate.setDone(task.getDone());
-        toUpdate.setExercises(task.getExercises());
-        toUpdate.setReps(task.getReps());
-        toUpdate.setSets(task.getSets());
+        toUpdate.setExerciseWrappers(task.getExerciseWrappers());
         toUpdate.setWorkout(task.getWorkout());
         toUpdate.setName(task.getName());
         return taskRepo.save(toUpdate);

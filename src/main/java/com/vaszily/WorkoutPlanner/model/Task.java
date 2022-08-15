@@ -12,13 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 public class Task extends BaseEntity{
+    private String name;
     @OneToMany(mappedBy ="task")
-    private List<Exercise> exercises;
+    private List<ExerciseWrapper> exerciseWrappers;
     @ManyToOne
     private Workout workout;
-    private Integer reps;
-    private Integer sets;
-    private Integer usedWeight;
     private String comment;
     private Boolean done;
 }

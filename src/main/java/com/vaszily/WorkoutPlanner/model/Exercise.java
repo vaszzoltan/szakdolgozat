@@ -4,17 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 
-@Entity
 @Getter
 @Setter
-
+@Entity
 public class Exercise extends BaseEntity{
-    @ManyToOne
-    private Task task;
-    public Exercise(String name, Task task){
-        this.name=name;
-        this.task=task;
-    }
+    private String name;
+    @OneToMany(mappedBy = "exercise")
+    private List<ExerciseWrapper> exerciseWrappers;
 }

@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Account extends BaseEntity {
+    private String name;
+    // TODO private String role; enummal megoldani
     @ManyToMany(mappedBy = "accounts")
     private List<WorkoutPlan> workoutPlans;
     @ManyToMany(mappedBy = "accounts")

@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class WorkoutPlan extends BaseEntity {
+    private String name;
     @ManyToMany(mappedBy ="workoutPlans")
     private List<Workout> workouts;
     @ManyToMany

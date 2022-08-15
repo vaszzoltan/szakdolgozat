@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Workout extends BaseEntity{
+    private String name;
     @OneToMany(mappedBy ="workout")
     private List<Task> tasks;
     @ManyToMany
