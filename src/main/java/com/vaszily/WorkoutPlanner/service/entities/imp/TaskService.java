@@ -45,7 +45,9 @@ public class TaskService implements EntityService<Task> {
         Task toUpdate = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
         toUpdate.setComment(task.getComment());
         toUpdate.setDone(task.getDone());
+        if(task.getExerciseWrappers()==null ||task.getExerciseWrappers().size()==0) throw new RuntimeException("Exercisewrapper cannot be null or empty!");
         toUpdate.setExerciseWrappers(task.getExerciseWrappers());
+        if(task.getWorkout()==null) throw new RuntimeException("Workout cannot be null!");
         toUpdate.setWorkout(task.getWorkout());
         toUpdate.setName(task.getName());
         return taskRepo.save(toUpdate);

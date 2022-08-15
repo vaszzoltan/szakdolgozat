@@ -37,6 +37,7 @@ public class ExerciseService implements EntityService<Exercise> {
     public Exercise update(Long id, Exercise exercise) {
         Exercise toUpdate = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
         toUpdate.setName(exercise.getName());
+        toUpdate.setDynamic(exercise.isDynamic());
         toUpdate.setExerciseWrappers(exercise.getExerciseWrappers());
         return exerciseRepo.save(toUpdate);
 
