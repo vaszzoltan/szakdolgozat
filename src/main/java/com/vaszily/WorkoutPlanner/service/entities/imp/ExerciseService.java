@@ -1,7 +1,7 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
-import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
-import com.vaszily.WorkoutPlanner.repositories.ExerciseWrapperRepo;
+import com.vaszily.WorkoutPlanner.model.Exercise;
+import com.vaszily.WorkoutPlanner.repositories.ExerciseRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,47 +10,42 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 @AllArgsConstructor
 @Service
-public class ExerciseService implements EntityService<ExerciseWrapper> {
-    private ExerciseWrapperRepo exerciseWrapperRepo;
+public class ExerciseService implements EntityService<Exercise> {
+    private ExerciseRepo exerciseRepo;
 
     @Override
-    public List<ExerciseWrapper> getAll() {
-        return exerciseWrapperRepo.findAll();
+    public List<Exercise> getAll() {
+        return exerciseRepo.findAll();
     }
 
     @Override
-    public List<ExerciseWrapper> getAllByName(String name) {
+    public List<Exercise> getAllByName(String name) {
         throw new RuntimeException();
     }
 
     @Override
-    public ExerciseWrapper getById(Long id) {
-        return exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Exercise getById(Long id) {
+        return exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public ExerciseWrapper save(ExerciseWrapper toSave) {
-        return exerciseWrapperRepo.save(toSave);
+    public Exercise save(Exercise toSave) {
+        return exerciseRepo.save(toSave);
     }
 
     @Override
-    public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper) {
-        ExerciseWrapper toUpdate = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-        toUpdate.setExercise(exerciseWrapper.getExercise());
-        toUpdate.setReps(exerciseWrapper.getReps());
-        toUpdate.setSets(exerciseWrapper.getSets());
-        toUpdate.setDurationInSecond(exerciseWrapper.getDurationInSecond());
-        toUpdate.setStaticOrDynamic(exerciseWrapper.isStaticOrDynamic());
-        toUpdate.setUsedWeight(exerciseWrapper.getUsedWeight());
-        toUpdate.setTask(exerciseWrapper.getTask());
-        return exerciseWrapperRepo.save(toUpdate);
+    public Exercise update(Long id, Exercise exercise) {
+        Exercise toUpdate = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        toUpdate.setName(exercise.getName());
+        toUpdate.setExerciseWrappers(exercise.getExerciseWrappers());
+        return exerciseRepo.save(toUpdate);
 
 
     }
 
     @Override
     public void delete(Long id) {
-        ExerciseWrapper toDelete = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-        exerciseWrapperRepo.delete(toDelete);
+        Exercise toDelete = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        exerciseRepo.delete(toDelete);
     }
 }
