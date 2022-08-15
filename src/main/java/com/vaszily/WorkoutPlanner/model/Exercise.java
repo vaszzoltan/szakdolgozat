@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 public class Exercise extends BaseEntity{
     private String name;
+    private boolean dynamic;
     @OneToMany(mappedBy = "exercise")
     private List<ExerciseWrapper> exerciseWrappers;
 }

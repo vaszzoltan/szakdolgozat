@@ -14,7 +14,7 @@ public class ExerciseWrapper extends BaseEntity{
     private Exercise exercise;
     private Integer reps;
     private Integer sets;
-    private boolean staticOrDynamic;
+
     private Integer durationInSecond;
     private Integer usedWeight;
     @ManyToOne

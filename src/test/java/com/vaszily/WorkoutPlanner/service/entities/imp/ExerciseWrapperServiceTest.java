@@ -19,7 +19,7 @@ class ExerciseWrapperServiceTest {
 
     @BeforeEach
     void setUp(){
-        underTest = new ExerciseService(exerciseWrapperRepo);
+       // underTest = new ExerciseService(exerciseWrapperRepo);
     }
 
 
