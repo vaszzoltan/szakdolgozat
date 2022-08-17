@@ -1,12 +1,17 @@
 package com.vaszily.WorkoutPlanner.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.vaszily.WorkoutPlanner.model.Exercise;
 
-@Getter
-@Setter
+
 public class ExerciseRequest {
     private Long id;
     private String name;
     private Boolean dynamic;
+
+    public Exercise asEntity(){
+        Exercise exercise = new Exercise();
+        exercise.setName(name);
+        exercise.setDynamic(dynamic);
+        return exercise;
+    }
 }
