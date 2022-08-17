@@ -1,6 +1,7 @@
 package com.vaszily.WorkoutPlanner.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Workout extends BaseEntity{
     private String name;
     @OneToMany(mappedBy ="workout")
@@ -24,4 +26,19 @@ public class Workout extends BaseEntity{
     private Date finishDate;
     private String description;
     private String afterEffect;
+
+    public Workout(Long id){
+        this.id = id;
+    }
+
+    public void update(Workout w){
+        this.name = name;
+        this.tasks.addAll(w.getTasks());
+        this.workoutPlans.addAll(w.getWorkoutPlans());
+        this.accounts.addAll(accounts);
+        this.goalDate = w.getGoalDate();
+        this.finishDate = w.getFinishDate();
+        this.description = w.getDescription();
+        this.afterEffect = w.getAfterEffect();
+    }
 }
