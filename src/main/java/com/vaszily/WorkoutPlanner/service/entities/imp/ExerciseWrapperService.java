@@ -34,18 +34,7 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     @Override
     public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper) {
         ExerciseWrapper toUpdate = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-        if(exerciseWrapper.getExercise()==null) throw new NullPointerException("Exercise cannot be null!");
-        toUpdate.setExercise(exerciseWrapper.getExercise());
-        toUpdate.setSets(exerciseWrapper.getSets());
-        toUpdate.setUsedWeight(exerciseWrapper.getUsedWeight());
-        toUpdate.setTask(exerciseWrapper.getTask());
-        if(toUpdate.getExercise().isDynamic()){
-            toUpdate.setReps(exerciseWrapper.getReps());
-            toUpdate.setDurationInSecond(null);
-        }else{
-            toUpdate.setDurationInSecond(exerciseWrapper.getDurationInSecond());
-            toUpdate.setReps(null);
-        }
+        toUpdate.update(exerciseWrapper);
         return exerciseWrapperRepo.save(toUpdate);
 
 

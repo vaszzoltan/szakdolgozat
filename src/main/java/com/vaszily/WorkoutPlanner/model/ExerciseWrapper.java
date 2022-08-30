@@ -25,10 +25,16 @@ public class ExerciseWrapper extends BaseEntity{
     }
 
     public void update(ExerciseWrapper e){
+        if(e.getExercise()==null) throw new RuntimeException("Exercise cannot be null!");
         this.exercise = e.getExercise();
-        this.reps = e.getReps();
         this.sets = e.getSets();
-        this.durationInSecond = e.getDurationInSecond();
+        if(e.getExercise().getDynamic()){
+            this.reps = e.getReps();
+            this.durationInSecond = null;
+        }else{
+            this.durationInSecond = e.getDurationInSecond();
+            this.reps = null;
+        }
         this.usedWeight = e.getUsedWeight();
         this.task = task;
     }
