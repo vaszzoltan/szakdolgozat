@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Exercise extends BaseEntity{
     private String name;
-    private Boolean dynamic;
+    private Boolean repeatable;
     @OneToMany(mappedBy = "exercise")
     private List<ExerciseWrapper> exerciseWrappers;
 
@@ -24,6 +24,6 @@ public class Exercise extends BaseEntity{
 
     public void update(Exercise exercise){
         this.name = exercise.getName();
-        this.dynamic = exercise.getDynamic();
+        this.repeatable = exercise.getRepeatable();
     }
 }
