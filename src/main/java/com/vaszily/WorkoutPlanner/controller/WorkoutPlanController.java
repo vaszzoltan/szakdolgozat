@@ -1,6 +1,7 @@
 package com.vaszily.WorkoutPlanner.controller;
 
 import com.vaszily.WorkoutPlanner.dto.request.WorkoutPlanRequest;
+import com.vaszily.WorkoutPlanner.dto.response.WorkoutPlanResponse;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.service.entities.imp.WorkoutPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/api/workout-plan")
@@ -21,26 +23,26 @@ public class WorkoutPlanController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<WorkoutPlan> getAll(){
-        return workoutPlanService.getAll();
+    public List<WorkoutPlanResponse> getAll(){
+        return workoutPlanService.getAll().stream().map(WorkoutPlanResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkoutPlan getById(@PathVariable Long id){
-        return workoutPlanService.getById(id);
+    public WorkoutPlanResponse getById(@PathVariable Long id){
+        return new WorkoutPlanResponse(workoutPlanService.getById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkoutPlan addWorkoutPlan(WorkoutPlanRequest workoutPlanRequest){
-        return workoutPlanService.save(workoutPlanRequest.asEntity());
+    public WorkoutPlanResponse addWorkoutPlan(WorkoutPlanRequest workoutPlanRequest){
+        return new WorkoutPlanResponse(workoutPlanService.save(workoutPlanRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkoutPlan updateWorkoutPlan(@PathVariable Long id, WorkoutPlanRequest workoutPlanRequest){
-        return workoutPlanService.update(id, workoutPlanRequest.asEntity());
+    public WorkoutPlanResponse updateWorkoutPlan(@PathVariable Long id, WorkoutPlanRequest workoutPlanRequest){
+        return new WorkoutPlanResponse(workoutPlanService.update(id, workoutPlanRequest.asEntity()));
     }
 
     @DeleteMapping("/{id}")

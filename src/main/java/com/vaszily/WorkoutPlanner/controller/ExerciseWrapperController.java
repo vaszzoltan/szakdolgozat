@@ -1,13 +1,14 @@
 package com.vaszily.WorkoutPlanner.controller;
 
 import com.vaszily.WorkoutPlanner.dto.request.ExerciseWrapperRequest;
-import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
+import com.vaszily.WorkoutPlanner.dto.response.ExerciseWrapperResponse;
 import com.vaszily.WorkoutPlanner.service.entities.imp.ExerciseWrapperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/api/exercise-wrapper")
@@ -21,26 +22,26 @@ public class ExerciseWrapperController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ExerciseWrapper> getAll(){
-        return exerciseWrapperService.getAll();
+    public List<ExerciseWrapperResponse> getAll(){
+        return exerciseWrapperService.getAll().stream().map(ExerciseWrapperResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseWrapper getById(@PathVariable Long id){
-        return exerciseWrapperService.getById(id);
+    public ExerciseWrapperResponse getById(@PathVariable Long id){
+        return new ExerciseWrapperResponse(exerciseWrapperService.getById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExerciseWrapper addExerciseWrapper(ExerciseWrapperRequest exerciseRequest){
-        return exerciseWrapperService.save(exerciseRequest.asEntity());
+    public ExerciseWrapperResponse addExerciseWrapper(ExerciseWrapperRequest exerciseRequest){
+        return new ExerciseWrapperResponse(exerciseWrapperService.save(exerciseRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseWrapper updateExerciseWrapper(@PathVariable Long id, ExerciseWrapperRequest exerciseRequest){
-        return exerciseWrapperService.update(id, exerciseRequest.asEntity());
+    public ExerciseWrapperResponse updateExerciseWrapper(@PathVariable Long id, ExerciseWrapperRequest exerciseRequest){
+        return new ExerciseWrapperResponse(exerciseWrapperService.update(id, exerciseRequest.asEntity()));
     }
 
     @DeleteMapping("/{id}")

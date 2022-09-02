@@ -1,13 +1,14 @@
 package com.vaszily.WorkoutPlanner.controller;
 
 import com.vaszily.WorkoutPlanner.dto.request.WorkoutRequest;
-import com.vaszily.WorkoutPlanner.model.Workout;
+import com.vaszily.WorkoutPlanner.dto.response.WorkoutResponse;
 import com.vaszily.WorkoutPlanner.service.entities.imp.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/api/workout")
@@ -21,26 +22,26 @@ public class WorkoutController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Workout> getAll(){
-        return workoutService.getAll();
+    public List<WorkoutResponse> getAll(){
+        return workoutService.getAll().stream().map(WorkoutResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Workout getById(@PathVariable Long id){
-        return workoutService.getById(id);
+    public WorkoutResponse getById(@PathVariable Long id){
+        return new WorkoutResponse(workoutService.getById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Workout addWorkout(WorkoutRequest exerciseRequest){
-        return workoutService.save(exerciseRequest.asEntity());
+    public WorkoutResponse addWorkout(WorkoutRequest exerciseRequest){
+        return new WorkoutResponse(workoutService.save(exerciseRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Workout updateWorkout(@PathVariable Long id, WorkoutRequest exerciseRequest){
-        return workoutService.update(id, exerciseRequest.asEntity());
+    public WorkoutResponse updateWorkout(@PathVariable Long id, WorkoutRequest exerciseRequest){
+        return new WorkoutResponse(workoutService.update(id, exerciseRequest.asEntity()));
     }
 
     @DeleteMapping("/{id}")
