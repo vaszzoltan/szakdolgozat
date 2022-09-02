@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController("/api/workout")
 public class WorkoutController {
     private final WorkoutService workoutService;
 
