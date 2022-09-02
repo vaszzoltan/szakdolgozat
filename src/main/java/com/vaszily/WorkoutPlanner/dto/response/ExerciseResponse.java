@@ -1,21 +1,16 @@
 package com.vaszily.WorkoutPlanner.dto.response;
 
-import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
+
+import com.vaszily.WorkoutPlanner.model.Exercise;
 
 public class ExerciseResponse {
-    String name;
-    Boolean repeatable;
-    Integer reps;
-    Integer sets;
-    Integer durationInSecond;
-    Integer usedWeight;
+    private Long id;
+    private String name;
+    private Boolean repeatable;
 
-    public ExerciseResponse(ExerciseWrapper exerciseWrapper){
-        this.name = exerciseWrapper.getExercise().getName();
-        this.repeatable = exerciseWrapper.getExercise().getRepeatable();
-        this.reps = exerciseWrapper.getReps();
-        this.sets = exerciseWrapper.getSets();
-        this.durationInSecond = exerciseWrapper.getDurationInSecond();
-        this.usedWeight = exerciseWrapper.getUsedWeight();
+    public ExerciseResponse(Exercise exercise){
+        this.id = exercise.getId();
+        this.name = exercise.getName();
+        this.repeatable = exercise.getRepeatable();
     }
 }
