@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/exercise")
+@RestController()
+@RequestMapping("/api/exercise")
 public class ExerciseController {
     private final ExerciseService exerciseService;
 
