@@ -4,13 +4,16 @@ import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Getter
+@Setter
 public class WorkoutRequest {
     private String name;
     private Set<Long> tasks;

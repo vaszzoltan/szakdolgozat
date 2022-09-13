@@ -2,7 +2,11 @@ package com.vaszily.WorkoutPlanner.dto.response;
 
 
 import com.vaszily.WorkoutPlanner.model.Exercise;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ExerciseResponse {
     private Long id;
     private String name;

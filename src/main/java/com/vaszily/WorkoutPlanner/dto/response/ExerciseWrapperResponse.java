@@ -1,7 +1,11 @@
 package com.vaszily.WorkoutPlanner.dto.response;
 
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ExerciseWrapperResponse {
     private String name;
     private Boolean repeatable;

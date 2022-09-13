@@ -1,11 +1,13 @@
 package com.vaszily.WorkoutPlanner.dto.response;
 
 import com.vaszily.WorkoutPlanner.model.Task;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Getter
+@Setter
 public class TaskResponse {
     private Long id;
     private String name;

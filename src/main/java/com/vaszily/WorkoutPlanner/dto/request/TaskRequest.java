@@ -3,8 +3,13 @@ package com.vaszily.WorkoutPlanner.dto.request;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.model.Workout;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Set;
 import java.util.stream.Collectors;
+@Getter
+@Setter
 
 public class TaskRequest {
     private String name;

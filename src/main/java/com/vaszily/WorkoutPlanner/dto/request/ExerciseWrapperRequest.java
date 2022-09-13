@@ -3,8 +3,13 @@ package com.vaszily.WorkoutPlanner.dto.request;
 import com.vaszily.WorkoutPlanner.model.Exercise;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+@Getter
+@Setter
 
 public class ExerciseWrapperRequest {
     private Long exercise;

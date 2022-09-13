@@ -3,8 +3,12 @@ package com.vaszily.WorkoutPlanner.dto.request;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
-import java.util.Arrays;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Arrays;
+@Getter
+@Setter
 public class WorkoutPlanRequest {
     private String name;
     private Long workout;

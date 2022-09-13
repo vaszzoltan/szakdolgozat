@@ -1,8 +1,11 @@
 package com.vaszily.WorkoutPlanner.dto.request;
 
 import com.vaszily.WorkoutPlanner.model.Exercise;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 public class ExerciseRequest {
     private Long id;
     private String name;
@@ -10,8 +13,8 @@ public class ExerciseRequest {
 
     public Exercise asEntity(){
         Exercise exercise = new Exercise();
-        exercise.setName(name);
-        exercise.setRepeatable(repeatable);
+        exercise.setName(this.name);
+        exercise.setRepeatable(this.repeatable);
         return exercise;
     }
 }

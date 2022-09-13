@@ -1,10 +1,13 @@
 package com.vaszily.WorkoutPlanner.dto.response;
 
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Getter
+@Setter
 public class WorkoutPlanResponse {
     private String name;
     private List<WorkoutResponse> workouts;
