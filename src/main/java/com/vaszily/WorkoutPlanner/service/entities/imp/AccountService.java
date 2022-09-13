@@ -1,8 +1,8 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
-import com.vaszily.WorkoutPlanner.model.Account;
+import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.AccountRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import javax.persistence.EntityExistsException;
 import java.util.List;
 
 @Service
-public class AccountService implements EntityService<Account> {
+public class AccountService implements IAccountService {
     AccountRepo accountRepo;
     @Autowired
     public AccountService(AccountRepo accountRepo){
@@ -22,8 +22,8 @@ public class AccountService implements EntityService<Account> {
     }
 
     @Override
-    public List<Account> getAllByName(String name) {
-        return accountRepo.findAllByName(name);
+    public List<Account> getAllByName(String username) {
+        return accountRepo.findAllByUsername(username);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class AccountService implements EntityService<Account> {
     @Override
     public Account update(Long id, Account toUpdate) {
         Account account  = getById(id);
-        account.setName(toUpdate.getName());
+        account.setUsername(toUpdate.getUsername());
         account.setWorkouts(toUpdate.getWorkouts());
         account.setWorkoutPlans(toUpdate.getWorkoutPlans());
         return account;

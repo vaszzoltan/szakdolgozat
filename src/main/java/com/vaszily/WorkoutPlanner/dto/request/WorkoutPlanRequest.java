@@ -1,6 +1,6 @@
 package com.vaszily.WorkoutPlanner.dto.request;
 
-import com.vaszily.WorkoutPlanner.model.Account;
+import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class WorkoutPlanRequest {
     private String name;
     private Long workout;
-    private Long account;
+    private String account;
     private Integer rating;
     private String description;
     private String comment;

@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.model;
 
+import com.vaszily.WorkoutPlanner.model.auth.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

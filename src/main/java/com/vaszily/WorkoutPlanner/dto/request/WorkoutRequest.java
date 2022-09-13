@@ -1,6 +1,6 @@
 package com.vaszily.WorkoutPlanner.dto.request;
 
-import com.vaszily.WorkoutPlanner.model.Account;
+import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
@@ -15,7 +15,7 @@ public class WorkoutRequest {
     private String name;
     private Set<Long> tasks;
     private Long workoutPlan;
-    private Long account;
+    private String account;
     private String goalDate;
     private String finishDate;
     private String description;
