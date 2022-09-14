@@ -34,13 +34,13 @@ public class ExerciseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExerciseResponse addExercise(ExerciseRequest exerciseRequest){
+    public ExerciseResponse addExercise(@RequestBody ExerciseRequest exerciseRequest){
         return new ExerciseResponse(exerciseService.save(exerciseRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseResponse updateExercise(@PathVariable Long id, ExerciseRequest exerciseRequest){
+    public ExerciseResponse updateExercise(@PathVariable Long id, @RequestBody ExerciseRequest exerciseRequest){
         return new ExerciseResponse(exerciseService.update(id, exerciseRequest.asEntity()));
     }
 

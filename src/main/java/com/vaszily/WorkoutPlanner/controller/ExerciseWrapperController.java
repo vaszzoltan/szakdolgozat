@@ -34,13 +34,13 @@ public class ExerciseWrapperController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExerciseWrapperResponse addExerciseWrapper(ExerciseWrapperRequest exerciseRequest){
+    public ExerciseWrapperResponse addExerciseWrapper(@RequestBody ExerciseWrapperRequest exerciseRequest){
         return new ExerciseWrapperResponse(exerciseWrapperService.save(exerciseRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseWrapperResponse updateExerciseWrapper(@PathVariable Long id, ExerciseWrapperRequest exerciseRequest){
+    public ExerciseWrapperResponse updateExerciseWrapper(@PathVariable Long id, @RequestBody ExerciseWrapperRequest exerciseRequest){
         return new ExerciseWrapperResponse(exerciseWrapperService.update(id, exerciseRequest.asEntity()));
     }
 

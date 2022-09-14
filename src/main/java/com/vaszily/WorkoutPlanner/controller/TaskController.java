@@ -34,13 +34,13 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskResponse addTask(TaskRequest exerciseRequest){
+    public TaskResponse addTask(@RequestBody TaskRequest exerciseRequest){
         return new TaskResponse(taskService.save(exerciseRequest.asEntity()));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTask(@PathVariable Long id, TaskRequest exerciseRequest){
+    public TaskResponse updateTask(@PathVariable Long id, @RequestBody TaskRequest exerciseRequest){
         return new TaskResponse(taskService.update(id, exerciseRequest.asEntity()));
     }
 
