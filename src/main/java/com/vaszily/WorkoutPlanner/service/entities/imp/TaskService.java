@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class TaskService implements EntityService<Task> {
-    private TaskRepo taskRepo;
+    private final TaskRepo taskRepo;
 
     @Autowired
     public TaskService(TaskRepo taskRepo) {

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class AccountService implements IAccountService {
-    AccountRepo accountRepo;
+    private final AccountRepo accountRepo;
     @Autowired
     public AccountService(AccountRepo accountRepo){
         this.accountRepo = accountRepo;

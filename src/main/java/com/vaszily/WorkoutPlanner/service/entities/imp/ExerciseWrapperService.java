@@ -3,6 +3,7 @@ package com.vaszily.WorkoutPlanner.service.entities.imp;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseWrapperRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,6 +11,11 @@ import java.util.List;
 @Service
 public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     private ExerciseWrapperRepo exerciseWrapperRepo;
+
+    @Autowired
+    public ExerciseWrapperService(ExerciseWrapperRepo exerciseWrapperRepo){
+        this.exerciseWrapperRepo = exerciseWrapperRepo;
+    }
 
     @Override
     public List<ExerciseWrapper> getAll() {

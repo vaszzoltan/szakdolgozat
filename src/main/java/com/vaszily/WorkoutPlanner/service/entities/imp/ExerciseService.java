@@ -4,14 +4,19 @@ import com.vaszily.WorkoutPlanner.model.Exercise;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-@AllArgsConstructor
+
 @Service
 public class ExerciseService implements EntityService<Exercise> {
     private ExerciseRepo exerciseRepo;
+    @Autowired
+    public ExerciseService(ExerciseRepo exerciseRepo){
+        this.exerciseRepo = exerciseRepo;
+    }
 
     @Override
     public List<Exercise> getAll() {
