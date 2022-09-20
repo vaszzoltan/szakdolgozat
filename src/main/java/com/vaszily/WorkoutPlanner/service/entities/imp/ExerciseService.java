@@ -50,7 +50,7 @@ public class ExerciseService implements EntityService<Exercise> {
     @Override
     public void delete(Long id) {
         Exercise toDelete = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-        if(toDelete.getExerciseWrappers()==null || toDelete.getExerciseWrappers().size()==0)
+        if(toDelete.getExerciseWrappers().size()>0)
             throw new ReferencedEntityException("This excersice used by at least a exercise wrapper!");
         exerciseRepo.delete(toDelete);
     }

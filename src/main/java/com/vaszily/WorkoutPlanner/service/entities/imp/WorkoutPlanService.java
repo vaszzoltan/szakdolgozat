@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkoutPlanService implements EntityService<WorkoutPlan> {
@@ -77,11 +78,8 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     public void delete(Long id) {
         WorkoutPlan toDelete = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
         for(Workout w : toDelete.getWorkouts()){
-            w.getWorkoutPlans().stream().forEach(a->{
-                if(a.getId()==toDelete.getId()){
-                    w.getWorkoutPlans().remove(a);
-                }
-            });
+            Long deleteId = toDelete.getId();
+            w.setWorkoutPlans(w.getWorkoutPlans().stream().filter(a -> a.getId()!=deleteId).collect(Collectors.toSet()));
             workoutService.save(w);
         }
         workoutPlanRepo.delete(toDelete);

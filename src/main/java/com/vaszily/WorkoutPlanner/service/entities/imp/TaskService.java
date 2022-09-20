@@ -76,8 +76,13 @@ public class TaskService implements EntityService<Task> {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Task toDelete = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        for(ExerciseWrapper e : toDelete.getExerciseWrappers()){
+            e.setTask(null);
+            exerciseWrapperService.save(e);
+        }
         taskRepo.delete(toDelete);
     }
 }
