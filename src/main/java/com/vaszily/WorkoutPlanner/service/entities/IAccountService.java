@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IAccountService {
     List<Account> getAll();
-    List<Account> getAllByName(String name);
+    Account getByUserName(String name);
     Account getById(Long Id);
     Account save(Account toSave);
     Account update(Long id, Account toUpdate);

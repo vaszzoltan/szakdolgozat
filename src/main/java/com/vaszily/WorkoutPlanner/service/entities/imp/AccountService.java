@@ -21,9 +21,9 @@ public class AccountService implements IAccountService {
         return accountRepo.findAll();
     }
 
-    @Override
-    public List<Account> getAllByName(String username) {
-        return accountRepo.findAllByUsername(username);
+
+    public Account getByUserName(String username){
+        return accountRepo.findByUsername(username).orElseThrow(EntityExistsException::new);
     }
 
     @Override
