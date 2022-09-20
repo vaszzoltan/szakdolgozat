@@ -2,7 +2,6 @@ package com.vaszily.WorkoutPlanner.controller;
 
 import com.vaszily.WorkoutPlanner.dto.request.WorkoutPlanRequest;
 import com.vaszily.WorkoutPlanner.dto.response.WorkoutPlanResponse;
-import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.service.entities.imp.WorkoutPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
