@@ -41,11 +41,13 @@ public class WebSecurityConfig {
                         .antMatchers("/h2-console").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic()
+
                 /*.formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll())*/
                 /*.userDetailsService(userDetailsManager(dataSource))
                 .logout((logout) -> logout.permitAll())*/;
+                http.headers().frameOptions().disable();
         return http.build();
     }
 
