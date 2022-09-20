@@ -6,10 +6,11 @@ import com.vaszily.WorkoutPlanner.repositories.TaskRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 

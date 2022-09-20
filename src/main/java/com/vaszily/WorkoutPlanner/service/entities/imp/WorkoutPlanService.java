@@ -6,9 +6,9 @@ import com.vaszily.WorkoutPlanner.repositories.WorkoutPlanRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -73,8 +73,17 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         WorkoutPlan toDelete = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        for(Workout w : toDelete.getWorkouts()){
+            w.getWorkoutPlans().stream().forEach(a->{
+                if(a.getId()==toDelete.getId()){
+                    w.getWorkoutPlans().remove(a);
+                }
+            });
+            workoutService.save(w);
+        }
         workoutPlanRepo.delete(toDelete);
     }
 }
