@@ -1,9 +1,9 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.exception.ReferencedEntityException;
 import com.vaszily.WorkoutPlanner.model.Exercise;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +50,8 @@ public class ExerciseService implements EntityService<Exercise> {
     @Override
     public void delete(Long id) {
         Exercise toDelete = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(toDelete.getExerciseWrappers()==null || toDelete.getExerciseWrappers().size()==0)
+            throw new ReferencedEntityException("This excersice used by at least a exercise wrapper!");
         exerciseRepo.delete(toDelete);
     }
 }

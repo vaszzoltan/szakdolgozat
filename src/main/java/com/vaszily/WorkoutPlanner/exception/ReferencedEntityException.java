@@ -1,7 +1,7 @@
 package com.vaszily.WorkoutPlanner.exception;
 
-public class ReferenceEntityException extends RuntimeException{
-    public ReferenceEntityException(String msg){
+public class ReferencedEntityException extends RuntimeException{
+    public ReferencedEntityException(String msg){
         super(msg);
     }
 }
