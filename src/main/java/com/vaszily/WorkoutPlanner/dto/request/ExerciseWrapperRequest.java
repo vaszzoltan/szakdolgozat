@@ -19,7 +19,7 @@ public class ExerciseWrapperRequest {
     private Integer reps;
     private Integer durationInSecond;
     private Integer usedWeight;
-    private Long task;
+    //private Long task;
 
     public ExerciseWrapper asEntity(){
         ExerciseWrapper exerciseWrapper = new ExerciseWrapper();
@@ -28,7 +28,7 @@ public class ExerciseWrapperRequest {
         exerciseWrapper.setReps(this.reps);
         exerciseWrapper.setDurationInSecond(this.durationInSecond);
         exerciseWrapper.setUsedWeight(this.usedWeight);
-        exerciseWrapper.setTask(new Task(task));
+        //exerciseWrapper.setTask(new Task(task));
         return exerciseWrapper;
     }
 

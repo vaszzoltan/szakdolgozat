@@ -5,17 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Task extends BaseEntity{
+public class Task extends BaseEntity implements Serializable {
     private String name;
-    @OneToMany(mappedBy ="task")
+    @OneToMany(mappedBy ="task", fetch = FetchType.EAGER)
     private List<ExerciseWrapper> exerciseWrappers;
     @ManyToOne
     private Workout workout;

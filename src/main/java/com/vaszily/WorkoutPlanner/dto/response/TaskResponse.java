@@ -16,7 +16,7 @@ public class TaskResponse {
     private Boolean done;
 
     public TaskResponse(Task task){
-        this.id = id;
+        this.id = task.getId();
         this.name = task.getName();
         this.exerciseResponses = task.getExerciseWrappers().stream().map(ExerciseWrapperResponse::new).collect(Collectors.toList());
         this.comment = task.getComment();

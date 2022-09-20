@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutPlanRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
@@ -7,13 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 @Service
 public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     private final WorkoutPlanRepo workoutPlanRepo;
+    private final WorkoutService workoutService;
 
     @Autowired
-    public WorkoutPlanService(WorkoutPlanRepo workoutPlanRepo) {
+    public WorkoutPlanService(WorkoutPlanRepo workoutPlanRepo, WorkoutService workoutService) {
+        this.workoutService = workoutService;
         this.workoutPlanRepo = workoutPlanRepo;
     }
 
@@ -33,7 +40,14 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     }
 
     @Override
+    @Transactional
     public WorkoutPlan save(WorkoutPlan toSave) {
+        toSave.setWorkouts(getWorkoutsByDummies(toSave.getWorkouts()));
+        WorkoutPlan toRet = workoutPlanRepo.saveAndFlush(toSave);
+        for (Workout w : toRet.getWorkouts()) {
+            w.getWorkoutPlans().add(toRet);
+            workoutService.save(w);
+        }
         return workoutPlanRepo.save(toSave);
     }
 
@@ -48,6 +62,14 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
         toUpdate.setNumberOfRating(workoutPlan.getNumberOfRating());
         toUpdate.setName(workoutPlan.getName());
         return workoutPlanRepo.save(toUpdate);
+    }
+
+    private List<Workout> getWorkoutsByDummies(List<Workout> dummies) {
+        List<Workout> toRet = new ArrayList<>();
+        for (Workout w : dummies) {
+            toRet.add(workoutService.getById(w.getId()));
+        }
+        return toRet;
     }
 
     @Override

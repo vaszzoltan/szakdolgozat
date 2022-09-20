@@ -28,12 +28,15 @@ public class ExerciseWrapper extends BaseEntity{
         if(e.getExercise()==null) throw new RuntimeException("Exercise cannot be null!");
         this.exercise = e.getExercise();
         this.sets = e.getSets();
-        if(e.getExercise().getRepeatable()){
-            this.reps = e.getReps();
-            this.durationInSecond = null;
-        }else{
-            this.durationInSecond = e.getDurationInSecond();
-            this.reps = null;
+        if(exercise.getRepeatable()!=null) {
+            this.exercise.setRepeatable(e.getExercise().getRepeatable());
+            if (e.getExercise().getRepeatable()) {
+                this.reps = e.getReps();
+                this.durationInSecond = null;
+            } else {
+                this.durationInSecond = e.getDurationInSecond();
+                this.reps = null;
+            }
         }
         this.usedWeight = e.getUsedWeight();
         this.task = task;

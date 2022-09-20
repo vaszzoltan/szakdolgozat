@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.repositories.TaskRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
@@ -8,15 +9,19 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService implements EntityService<Task> {
     private final TaskRepo taskRepo;
+    private final ExerciseWrapperService exerciseWrapperService;
 
     @Autowired
-    public TaskService(TaskRepo taskRepo) {
+    public TaskService(TaskRepo taskRepo, ExerciseWrapperService exerciseWrapperService) {
         this.taskRepo = taskRepo;
+        this.exerciseWrapperService = exerciseWrapperService;
     }
 
     @Override
@@ -31,13 +36,20 @@ public class TaskService implements EntityService<Task> {
 
     @Override
     public Task getById(Long id) {
-        return taskRepo.findById(id).orElseThrow(EntityExistsException::new);
+        Task task = taskRepo.findById(id).orElseThrow(EntityExistsException::new);
+        return task;
     }
 
     @Override
+    @Transactional
     public Task save(Task toSave) {
-
-        return taskRepo.save(toSave);
+        toSave.setExerciseWrappers(getExerciseWrappersByDummies(toSave.getExerciseWrappers(), toSave));
+        Task toRet = taskRepo.saveAndFlush(toSave);
+        for(ExerciseWrapper e : toSave.getExerciseWrappers()) {
+            e.setTask(toSave);
+            exerciseWrapperService.save(e);
+        }
+        return toRet;
     }
 
     @Override
@@ -46,17 +58,25 @@ public class TaskService implements EntityService<Task> {
         toUpdate.setComment(task.getComment());
         toUpdate.setDone(task.getDone());
         if(task.getExerciseWrappers()==null ||task.getExerciseWrappers().size()==0) throw new RuntimeException("Exercisewrapper cannot be null or empty!");
-        toUpdate.setExerciseWrappers(task.getExerciseWrappers());
-        if(task.getWorkout()==null) throw new RuntimeException("Workout cannot be null!");
+        toUpdate.setExerciseWrappers(getExerciseWrappersByDummies(task.getExerciseWrappers(), toUpdate));
+        //if(task.getWorkout()==null) throw new RuntimeException("Workout cannot be null!");
         toUpdate.setWorkout(task.getWorkout());
         toUpdate.setName(task.getName());
-        return taskRepo.save(toUpdate);
+        return taskRepo.saveAndFlush(toUpdate);
+    }
+
+    private List<ExerciseWrapper> getExerciseWrappersByDummies(List<ExerciseWrapper> dummies, Task task){
+        List<ExerciseWrapper> toRet = new ArrayList<>();
+        for(ExerciseWrapper e : dummies){
+            e.setTask(task);
+            toRet.add(exerciseWrapperService.getById(e.getId()));
+        }
+        return toRet;
     }
 
     @Override
     public void delete(Long id) {
         Task toDelete = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
         taskRepo.delete(toDelete);
-
     }
 }

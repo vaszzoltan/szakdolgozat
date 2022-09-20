@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 @Getter
@@ -17,8 +19,8 @@ import java.util.stream.Collectors;
 public class WorkoutRequest {
     private String name;
     private Set<Long> tasks;
-    private Long workoutPlan;
-    private String account;
+    //private Long workoutPlan;
+    //private String account;
     private String goalDate;
     private String finishDate;
     private String description;
@@ -29,8 +31,10 @@ public class WorkoutRequest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         workout.setName(name);
         workout.setTasks(tasks.stream().map(Task::new).collect(Collectors.toList()));
-        workout.setWorkoutPlans(Arrays.asList(new WorkoutPlan(workoutPlan)));
-        workout.setAccounts(Arrays.asList(new Account(account)));
+        //workout.setWorkoutPlans(Arrays.asList(new WorkoutPlan(workoutPlan)));
+        //workout.setAccounts(Arrays.asList(new Account(account)));
+        workout.setWorkoutPlans(new HashSet<>());
+        workout.setAccounts(new ArrayList<>());
         try {
             workout.setGoalDate(sdf.parse(goalDate));
             workout.setFinishDate(sdf.parse(finishDate));

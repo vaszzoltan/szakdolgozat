@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class TaskRequest {
     private String name;
     private Set<Long> exerciseWrappers;
-    private Long workout;
+    //private Long workout;
     private String comment;
     private Boolean done;
 
@@ -22,7 +22,8 @@ public class TaskRequest {
         Task task = new Task();
         task.setName(this.name);
         task.setExerciseWrappers(exerciseWrappers.stream().map(ExerciseWrapper::new).collect(Collectors.toList()));
-        task.setWorkout(new Workout(workout));
+        //task.setWorkout(new Workout(workout));
+        task.setWorkout(null);
         task.setComment(comment);
         task.setDone(done);
         return task;

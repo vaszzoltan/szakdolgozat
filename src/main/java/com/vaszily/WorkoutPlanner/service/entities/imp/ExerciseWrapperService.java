@@ -10,11 +10,13 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 @Service
 public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
-    private ExerciseWrapperRepo exerciseWrapperRepo;
+    private final ExerciseWrapperRepo exerciseWrapperRepo;
+    private final ExerciseService exerciseService;
 
     @Autowired
-    public ExerciseWrapperService(ExerciseWrapperRepo exerciseWrapperRepo){
+    public ExerciseWrapperService(ExerciseWrapperRepo exerciseWrapperRepo, ExerciseService exerciseService){
         this.exerciseWrapperRepo = exerciseWrapperRepo;
+        this.exerciseService = exerciseService;
     }
 
     @Override
@@ -34,13 +36,14 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
 
     @Override
     public ExerciseWrapper save(ExerciseWrapper toSave) {
-
-        return exerciseWrapperRepo.save(toSave);
+        toSave.setExercise(exerciseService.getById(toSave.getExercise().getId()));
+        return exerciseWrapperRepo.saveAndFlush(toSave);
     }
 
     @Override
     public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper) {
         ExerciseWrapper toUpdate = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        exerciseWrapper.setExercise(exerciseService.getById(exerciseWrapper.getExercise().getId()));
         toUpdate.update(exerciseWrapper);
         return exerciseWrapperRepo.save(toUpdate);
 

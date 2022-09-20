@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class Workout extends BaseEntity{
     @OneToMany(mappedBy ="workout")
     private List<Task> tasks;
     @ManyToMany
-    private List<WorkoutPlan> workoutPlans;
+    private Set<WorkoutPlan> workoutPlans;
     @ManyToMany
     private List<Account> accounts;
     private Date goalDate;
