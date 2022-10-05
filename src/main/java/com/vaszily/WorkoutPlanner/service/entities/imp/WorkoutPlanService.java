@@ -2,6 +2,7 @@ package com.vaszily.WorkoutPlanner.service.entities.imp;
 
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
+import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutPlanRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     private final WorkoutPlanRepo workoutPlanRepo;
     private final WorkoutService workoutService;
+    private final AccountService accountService;
 
     @Autowired
-    public WorkoutPlanService(WorkoutPlanRepo workoutPlanRepo, WorkoutService workoutService) {
+    public WorkoutPlanService(WorkoutPlanRepo workoutPlanRepo, WorkoutService workoutService, AccountService accountService) {
         this.workoutService = workoutService;
         this.workoutPlanRepo = workoutPlanRepo;
+        this.accountService = accountService;
     }
 
     @Override
@@ -83,5 +85,14 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
             workoutService.save(w);
         }
         workoutPlanRepo.delete(toDelete);
+    }
+    @Transactional
+    public void addWorkoutPlanToAccount(Long id, String name) {
+        WorkoutPlan workoutPlan = getById(id);
+        Account account = accountService.getByUserName(name);
+        workoutPlan.getAccounts().add(account);
+        account.getWorkoutPlans().add(workoutPlan);
+        save(workoutPlan);
+        accountService.save(account);
     }
 }
