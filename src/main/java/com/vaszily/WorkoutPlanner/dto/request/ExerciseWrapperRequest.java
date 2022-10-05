@@ -12,12 +12,17 @@ import javax.validation.constraints.NotNull;
 @Setter
 
 public class ExerciseWrapperRequest {
+    @NotNull
+    @Min(value = 1, message = "Invalid exercise value!")
     private Long exercise;
     @NotNull
-    @Min(value = 0, message = "Min number of sets is 1!")
+    @Min(value = 1, message = "Min number of sets is 1!")
     private Integer sets;
+    @Min(value = 1, message = "Min value of reps is 1!")
     private Integer reps;
+    @Min(value = 1, message = "Min value of duration in second is 1!")
     private Integer durationInSecond;
+    @Min(value = 0, message = "Used weight cannot be less than 0!")
     private Integer usedWeight;
     //private Long task;
 
