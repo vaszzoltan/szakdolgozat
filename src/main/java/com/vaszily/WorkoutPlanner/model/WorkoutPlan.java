@@ -4,7 +4,6 @@ import com.vaszily.WorkoutPlanner.model.auth.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.util.List;
@@ -23,6 +22,7 @@ public class WorkoutPlan extends BaseEntity {
     private Integer numberOfRating;
     private String description;
     private String comment;
+
 
     public WorkoutPlan(Long id) {
         this.id = id;

@@ -36,7 +36,6 @@ public class ExerciseController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExerciseResponse addExercise(@RequestBody ExerciseRequest exerciseRequest, Principal principal){
-        System.out.println(principal.getName());
         return new ExerciseResponse(exerciseService.save(exerciseRequest.asEntity()));
     }
 

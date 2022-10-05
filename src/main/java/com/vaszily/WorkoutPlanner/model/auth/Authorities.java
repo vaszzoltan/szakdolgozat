@@ -1,8 +1,9 @@
 package com.vaszily.WorkoutPlanner.model.auth;
 
-import com.vaszily.WorkoutPlanner.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 
@@ -11,7 +12,10 @@ import javax.persistence.*;
 @Setter
 @Table(name = "authorities",
 uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "authority"})})
-public class Authorities extends BaseEntity {
+public class Authorities {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "username", columnDefinition = "VARCHAR")
     private Account username;
