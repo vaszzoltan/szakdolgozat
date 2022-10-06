@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
+
 @Getter
 @Setter
 
@@ -25,6 +27,18 @@ public class ExerciseWrapperRequest {
     @Min(value = 0, message = "Used weight cannot be less than 0!")
     private Integer usedWeight;
     //private Long task;
+
+    public ExerciseWrapper asEntity(Principal principal){
+        ExerciseWrapper exerciseWrapper = new ExerciseWrapper();
+        exerciseWrapper.setExercise(new Exercise(exercise));
+        exerciseWrapper.setSets(this.sets);
+        exerciseWrapper.setReps(this.reps);
+        exerciseWrapper.setDurationInSecond(this.durationInSecond);
+        exerciseWrapper.setUsedWeight(this.usedWeight);
+        exerciseWrapper.setCreatedBy(principal.getName());
+        //exerciseWrapper.setTask(new Task(task));
+        return exerciseWrapper;
+    }
 
     public ExerciseWrapper asEntity(){
         ExerciseWrapper exerciseWrapper = new ExerciseWrapper();

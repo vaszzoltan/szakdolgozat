@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,18 +37,18 @@ public class ExerciseController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExerciseResponse addExercise(@RequestBody ExerciseRequest exerciseRequest, Principal principal){
-        return new ExerciseResponse(exerciseService.save(exerciseRequest.asEntity()));
+        return new ExerciseResponse(exerciseService.save(exerciseRequest.asEntity(principal)));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseResponse updateExercise(@PathVariable Long id, @RequestBody ExerciseRequest exerciseRequest){
-        return new ExerciseResponse(exerciseService.update(id, exerciseRequest.asEntity()));
+    public ExerciseResponse updateExercise(@PathVariable Long id, @RequestBody ExerciseRequest exerciseRequest, Principal principal){
+        return new ExerciseResponse(exerciseService.update(id, exerciseRequest.asEntity(), principal));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExercise(@PathVariable Long id){
-        exerciseService.delete(id);
+    public void deleteExercise(@PathVariable Long id, Principal principal){
+        exerciseService.delete(id, principal);
     }
 }

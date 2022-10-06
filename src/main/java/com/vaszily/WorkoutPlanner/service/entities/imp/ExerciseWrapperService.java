@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseWrapperRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 @Service
 public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
@@ -41,8 +43,10 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     }
 
     @Override
-    public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper) {
+    public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper, Principal principal) {
         ExerciseWrapper toUpdate = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't update this exercise! Different creator!");
         exerciseWrapper.setExercise(exerciseService.getById(exerciseWrapper.getExercise().getId()));
         toUpdate.update(exerciseWrapper);
         return exerciseWrapperRepo.save(toUpdate);
@@ -51,8 +55,10 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, Principal principal) {
         ExerciseWrapper toDelete = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toDelete.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't delete this exercise wrapper! Different creator!");
         exerciseWrapperRepo.delete(toDelete);
     }
 }

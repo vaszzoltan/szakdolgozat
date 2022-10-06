@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,8 +57,10 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     }
 
     @Override
-    public WorkoutPlan update(Long id, WorkoutPlan workoutPlan) {
+    public WorkoutPlan update(Long id, WorkoutPlan workoutPlan, Principal principal) {
         WorkoutPlan toUpdate = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
         toUpdate.setAccounts(workoutPlan.getAccounts());
         toUpdate.setComment(workoutPlan.getComment());
         toUpdate.setDescription(workoutPlan.getDescription());
@@ -77,8 +81,10 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, Principal principal) {
         WorkoutPlan toDelete = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toDelete.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
         for(Workout w : toDelete.getWorkouts()){
             Long deleteId = toDelete.getId();
             w.setWorkoutPlans(w.getWorkoutPlans().stream().filter(a -> a.getId()!=deleteId).collect(Collectors.toSet()));

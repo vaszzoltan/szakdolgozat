@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -66,8 +68,10 @@ public class WorkoutService implements EntityService<Workout> {
     }
 
     @Override
-    public Workout update(Long id, Workout workout) {
+    public Workout update(Long id, Workout workout, Principal principal) {
         Workout toUpdate = workoutRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't update this workout! Different creator!");
         toUpdate.setName(workout.getName());
         toUpdate.setAccounts(workout.getAccounts());
         toUpdate.setAfterEffect(workout.getAfterEffect());
@@ -94,10 +98,12 @@ public class WorkoutService implements EntityService<Workout> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id, Principal principal) {
         Workout toDelete = workoutRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        if(!toDelete.getCreatedBy().equals(principal.getName()))
+            throw new MissingAuthorityException("Can't delete this workout! Different creator!");
         for(Task t : toDelete.getTasks()){
-            taskService.delete(t.getId());
+            taskService.delete(t.getId(), principal);
         }
         workoutRepo.delete(toDelete);
     }

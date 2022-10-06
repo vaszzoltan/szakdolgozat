@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class WorkoutPlanRequest {
     private String description;
     private String comment;
 
-    public WorkoutPlan asEntity(){
+    public WorkoutPlan asEntity(Principal principal){
         WorkoutPlan workoutPlan = new WorkoutPlan();
         workoutPlan.setName(name);
         if(workouts.size()==0)
@@ -31,6 +32,18 @@ public class WorkoutPlanRequest {
         workoutPlan.setWorkouts(workouts.stream().map(Workout::new).collect(Collectors.toList()));
         //workoutPlan.setAccounts(Arrays.asList(new Account(account)));
         //workoutPlan.setRating(rating);
+        workoutPlan.setDescription(description);
+        workoutPlan.setComment(comment);
+        workoutPlan.setCreatedBy(principal.getName());
+        return workoutPlan;
+    }
+
+    public WorkoutPlan asEntity(){
+        WorkoutPlan workoutPlan = new WorkoutPlan();
+        workoutPlan.setName(name);
+        if(workouts.size()==0)
+            throw new DataUploadException("Workouts size cannot be less than 1!");
+        workoutPlan.setWorkouts(workouts.stream().map(Workout::new).collect(Collectors.toList()));
         workoutPlan.setDescription(description);
         workoutPlan.setComment(comment);
         return workoutPlan;

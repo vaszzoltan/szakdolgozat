@@ -35,8 +35,8 @@ public class WorkoutController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkoutResponse addWorkout(@RequestBody WorkoutRequest workoutRequest){
-        return new WorkoutResponse(workoutService.save(workoutRequest.asEntity()));
+    public WorkoutResponse addWorkout(@RequestBody WorkoutRequest workoutRequest, Principal principal){
+        return new WorkoutResponse(workoutService.save(workoutRequest.asEntity(principal)));
     }
 
     @PutMapping("/subscribe/{id}")
@@ -47,13 +47,13 @@ public class WorkoutController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkoutResponse updateWorkout(@PathVariable Long id, @RequestBody WorkoutRequest workoutRequest){
-        return new WorkoutResponse(workoutService.update(id, workoutRequest.asEntity()));
+    public WorkoutResponse updateWorkout(@PathVariable Long id, @RequestBody WorkoutRequest workoutRequest, Principal principal){
+        return new WorkoutResponse(workoutService.update(id, workoutRequest.asEntity(), principal));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWorkout(@PathVariable Long id){
-        workoutService.delete(id);
+    public void deleteWorkout(@PathVariable Long id, Principal principal){
+        workoutService.delete(id, principal);
     }
 }

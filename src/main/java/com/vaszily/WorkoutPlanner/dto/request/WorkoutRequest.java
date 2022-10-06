@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,11 +30,33 @@ public class WorkoutRequest {
     private String description;
     private String afterEffect;
 
-    public Workout asEntity(){
+    public Workout asEntity(Principal principal){
         Workout workout = new Workout();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         workout.setName(name);
         if(tasks.size()==0)
+            throw new DataUploadException("Tasks size cannot be less than 1!");
+        workout.setTasks(tasks.stream().map(Task::new).collect(Collectors.toList()));
+        workout.setWorkoutPlans(new HashSet<>());
+        workout.setAccounts(new ArrayList<>());
+        try {
+            workout.setGoalDate(sdf.parse(goalDate));
+            workout.setFinishDate(sdf.parse(finishDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Wrong date format!");
+        }
+        workout.setDescription(description);
+        workout.setAfterEffect(afterEffect);
+        workout.setCreatedBy(principal.getName());
+        return workout;
+    }
+
+    public Workout asEntity() {
+        Workout workout = new Workout();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        workout.setName(name);
+        if (tasks.size() == 0)
             throw new DataUploadException("Tasks size cannot be less than 1!");
         workout.setTasks(tasks.stream().map(Task::new).collect(Collectors.toList()));
         workout.setWorkoutPlans(new HashSet<>());

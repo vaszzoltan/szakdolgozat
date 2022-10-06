@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
 @Getter
@@ -25,6 +26,20 @@ public class TaskRequest {
     private String comment;
     @NotNull
     private Boolean done;
+
+    public Task asEntity(Principal principal){
+        Task task = new Task();
+        task.setName(this.name);
+        if(exerciseWrappers.size()==0)
+            throw new DataUploadException("Exercise wrappers size cannot be less than 1!");
+        task.setExerciseWrappers(exerciseWrappers.stream().map(ExerciseWrapper::new).collect(Collectors.toList()));
+        //task.setWorkout(new Workout(workout));
+        task.setWorkout(null);
+        task.setComment(comment);
+        task.setDone(done);
+        task.setCreatedBy(principal.getName());
+        return task;
+    }
 
     public Task asEntity(){
         Task task = new Task();

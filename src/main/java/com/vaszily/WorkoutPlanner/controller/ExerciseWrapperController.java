@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,19 +35,19 @@ public class ExerciseWrapperController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExerciseWrapperResponse addExerciseWrapper(@RequestBody ExerciseWrapperRequest exerciseRequest){
-        return new ExerciseWrapperResponse(exerciseWrapperService.save(exerciseRequest.asEntity()));
+    public ExerciseWrapperResponse addExerciseWrapper(@RequestBody ExerciseWrapperRequest exerciseRequest, Principal principal){
+        return new ExerciseWrapperResponse(exerciseWrapperService.save(exerciseRequest.asEntity(principal)));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseWrapperResponse updateExerciseWrapper(@PathVariable Long id, @RequestBody ExerciseWrapperRequest exerciseRequest){
-        return new ExerciseWrapperResponse(exerciseWrapperService.update(id, exerciseRequest.asEntity()));
+    public ExerciseWrapperResponse updateExerciseWrapper(@PathVariable Long id, @RequestBody ExerciseWrapperRequest exerciseRequest, Principal principal){
+        return new ExerciseWrapperResponse(exerciseWrapperService.update(id, exerciseRequest.asEntity(), principal));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExerciseWrapper(@PathVariable Long id){
-        exerciseWrapperService.delete(id);
+    public void deleteExerciseWrapper(@PathVariable Long id, Principal principal){
+        exerciseWrapperService.delete(id, principal);
     }
 }
