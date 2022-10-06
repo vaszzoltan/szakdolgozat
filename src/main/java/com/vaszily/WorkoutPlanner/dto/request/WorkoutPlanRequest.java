@@ -19,8 +19,6 @@ public class WorkoutPlanRequest {
     private String name;
     @NotNull(message = "Workouts cannot be null!")
     private List<Long> workouts;
-    //private String account;
-    //private Integer rating;
     private String description;
     private String comment;
 
@@ -30,8 +28,6 @@ public class WorkoutPlanRequest {
         if(workouts.size()==0)
             throw new DataUploadException("Workouts size cannot be less than 1!");
         workoutPlan.setWorkouts(workouts.stream().map(Workout::new).collect(Collectors.toList()));
-        //workoutPlan.setAccounts(Arrays.asList(new Account(account)));
-        //workoutPlan.setRating(rating);
         workoutPlan.setDescription(description);
         workoutPlan.setComment(comment);
         workoutPlan.setCreatedBy(principal.getName());

@@ -18,7 +18,7 @@ public class WorkoutPlan extends BaseEntity {
     private List<Workout> workouts;
     @ManyToMany
     private List<Account> accounts;
-    private Integer rating;
+    private Double rating;
     private Integer numberOfRating;
     private String description;
     private String comment;

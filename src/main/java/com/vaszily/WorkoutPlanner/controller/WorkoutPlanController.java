@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.controller;
 
+import com.vaszily.WorkoutPlanner.dto.request.WorkoutPlanRatingRequest;
 import com.vaszily.WorkoutPlanner.dto.request.WorkoutPlanRequest;
 import com.vaszily.WorkoutPlanner.dto.response.WorkoutPlanResponse;
 import com.vaszily.WorkoutPlanner.service.entities.imp.WorkoutPlanService;
@@ -60,5 +61,10 @@ public class WorkoutPlanController {
     @ResponseStatus(HttpStatus.OK)
     public void removeWorkoutPlanFromAccount(@PathVariable Long id, Principal principal){
         workoutPlanService.removeWorkoutFromAccount(id, principal.getName());
+    }
+    @PutMapping("/rating/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void ratingWorkoutPlan(@PathVariable Long id, @RequestBody WorkoutPlanRatingRequest workoutPlanRatingRequest){
+        workoutPlanService.ratingWorkoutPlan(id, workoutPlanRatingRequest);
     }
 }

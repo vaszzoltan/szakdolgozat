@@ -1,5 +1,6 @@
 package com.vaszily.WorkoutPlanner.service.entities.imp;
 
+import com.vaszily.WorkoutPlanner.dto.request.WorkoutPlanRatingRequest;
 import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
@@ -110,5 +111,18 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
         account.getWorkoutPlans().remove(workoutPlan);
         workoutPlanRepo.save(workoutPlan);
         accountService.save(account);
+    }
+
+    public void ratingWorkoutPlan(Long id, WorkoutPlanRatingRequest workoutPlanRatingRequest) {
+        WorkoutPlan workoutPlan = getById(id);
+        if(workoutPlan.getRating()==null && workoutPlan.getNumberOfRating()==null){
+            workoutPlan.setRating( 1.0 * workoutPlanRatingRequest.getValue());
+            workoutPlan.setNumberOfRating(1);
+        }else{
+            Integer newNumberOfRating = workoutPlan.getNumberOfRating()+1;
+            Double newRatingValue = (1.0*workoutPlan.getRating()*workoutPlan.getNumberOfRating()+ workoutPlanRatingRequest.getValue())/newNumberOfRating;
+            workoutPlan.setRating(newRatingValue);
+            workoutPlan.setNumberOfRating(newNumberOfRating);
+        }
     }
 }
