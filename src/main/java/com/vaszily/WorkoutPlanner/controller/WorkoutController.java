@@ -39,12 +39,6 @@ public class WorkoutController {
         return new WorkoutResponse(workoutService.save(workoutRequest.asEntity(principal)));
     }
 
-    @PutMapping("/subscribe/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void addWorkoutToAccount(@PathVariable Long id, Principal principal){
-        workoutService.addWorkoutToAccount(id, principal.getName());
-    }
-
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public WorkoutResponse updateWorkout(@PathVariable Long id, @RequestBody WorkoutRequest workoutRequest, Principal principal){
@@ -56,4 +50,16 @@ public class WorkoutController {
     public void deleteWorkout(@PathVariable Long id, Principal principal){
         workoutService.delete(id, principal);
     }
+
+    @PutMapping("/subscribe/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addWorkoutToAccount(@PathVariable Long id, Principal principal){
+        workoutService.addWorkoutToAccount(id, principal.getName());
+    }
+    @PutMapping("/unsubscribe/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeWorkoutFromAccount(@PathVariable Long id, Principal principal){
+        workoutService.removeWorkoutFromAccount(id, principal.getName());
+    }
+
 }

@@ -45,15 +45,20 @@ public class WorkoutPlanController {
         return new WorkoutPlanResponse(workoutPlanService.update(id, workoutPlanRequest.asEntity(), principal));
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWorkoutPlan(@PathVariable Long id, Principal principal){
+        workoutPlanService.delete(id, principal);
+    }
+
     @PutMapping("/subscribe/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void addWorkoutPlanToAccount(@PathVariable Long id, Principal principal){
         workoutPlanService.addWorkoutPlanToAccount(id,principal.getName());
     }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWorkoutPlan(@PathVariable Long id, Principal principal){
-        workoutPlanService.delete(id, principal);
+    @PutMapping("/unsubscribe/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeWorkoutPlanFromAccount(@PathVariable Long id, Principal principal){
+        workoutPlanService.removeWorkoutFromAccount(id, principal.getName());
     }
 }

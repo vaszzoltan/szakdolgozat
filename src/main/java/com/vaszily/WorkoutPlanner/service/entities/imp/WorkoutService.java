@@ -116,4 +116,13 @@ public class WorkoutService implements EntityService<Workout> {
         workoutRepo.save(workout);
         accountService.save(account);
     }
+    @Transactional
+    public void removeWorkoutFromAccount(Long id, String name) {
+        Workout workout = getById(id);
+        Account account = accountService.getByUserName(name);
+        workout.getAccounts().remove(account);
+        account.getWorkouts().remove(workout);
+        workoutRepo.save(workout);
+        accountService.save(account);
+    }
 }

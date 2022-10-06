@@ -1,6 +1,7 @@
 package com.vaszily.WorkoutPlanner.model;
 
 import com.vaszily.WorkoutPlanner.model.auth.Account;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,8 +10,7 @@ import javax.persistence.ManyToMany;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class WorkoutPlan extends BaseEntity {
     private String name;

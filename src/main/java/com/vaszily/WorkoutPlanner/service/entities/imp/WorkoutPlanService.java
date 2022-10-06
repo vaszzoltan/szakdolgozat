@@ -98,7 +98,17 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
         Account account = accountService.getByUserName(name);
         workoutPlan.getAccounts().add(account);
         account.getWorkoutPlans().add(workoutPlan);
-        save(workoutPlan);
+        workoutPlanRepo.save(workoutPlan);
+        accountService.save(account);
+    }
+
+    @Transactional
+    public void removeWorkoutFromAccount(Long id, String name) {
+        WorkoutPlan workoutPlan = getById(id);
+        Account account = accountService.getByUserName(name);
+        workoutPlan.getAccounts().remove(account);
+        account.getWorkoutPlans().remove(workoutPlan);
+        workoutPlanRepo.save(workoutPlan);
         accountService.save(account);
     }
 }
