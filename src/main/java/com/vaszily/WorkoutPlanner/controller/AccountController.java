@@ -1,18 +1,24 @@
 package com.vaszily.WorkoutPlanner.controller;
 
+import com.vaszily.WorkoutPlanner.dto.request.AccountRequest;
+import com.vaszily.WorkoutPlanner.service.entities.imp.AccountService;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequestMapping("/")
 public class AccountController {
-    @GetMapping("login")
-    @ResponseStatus(HttpStatus.OK)
-    public void dummy(){
+    private final AccountService accountService;
+    @Autowired
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
+    @PostMapping("registration")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registration(@RequestBody AccountRequest accountRequest){
+        accountService.save(accountRequest.asEntity());
     }
 }

@@ -37,16 +37,10 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .cors().disable()
-                .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/h2-console").permitAll()
-                        .anyRequest().authenticated())
-                .httpBasic()
-
-                /*.formLogin((form) -> form
-                        .loginPage("/login")
-                        .permitAll())*/
-                /*.userDetailsService(userDetailsManager(dataSource))
-                .logout((logout) -> logout.permitAll())*/;
+                .authorizeHttpRequests()
+                        .antMatchers("/h2-console", "/registration").permitAll()
+                        .anyRequest().authenticated().and()
+                .httpBasic();
                 http.headers().frameOptions().disable();
         return http.build();
     }
@@ -62,9 +56,11 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
-        UserDetails user = User.builder().username("sa").password("$2a$12$X2UJLZzWurecHaRblR7bF.XR1qPHFuPW7n5qL13Sr.bVACk8OenCu").roles("SA").build();
+        UserDetails sa = User.builder().username("sa").password("$2a$12$X2UJLZzWurecHaRblR7bF.XR1qPHFuPW7n5qL13Sr.bVACk8OenCu").roles("WRITE","READ", "MANAGE_USER").build();
+        UserDetails user = User.builder().username("user").password("$2a$12$X2UJLZzWurecHaRblR7bF.XR1qPHFuPW7n5qL13Sr.bVACk8OenCu").roles("WRITE", "READ").build();
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
         users.createUser(user);
+        users.createUser(sa);
         return users;
     }
 

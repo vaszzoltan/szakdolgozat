@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class WorkoutPlanResponse {
     private String name;
     private List<WorkoutResponse> workouts;
-    private Integer rating;
+    private Double rating;
     private Integer numberOfRating;
     private String description;
     private String comment;
