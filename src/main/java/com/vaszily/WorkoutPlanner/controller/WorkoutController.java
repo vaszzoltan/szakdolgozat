@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +36,13 @@ public class WorkoutController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkoutResponse addWorkout(@RequestBody WorkoutRequest workoutRequest, Principal principal){
+    public WorkoutResponse addWorkout(@RequestBody @Valid WorkoutRequest workoutRequest, Principal principal){
         return new WorkoutResponse(workoutService.save(workoutRequest.asEntity(principal)));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkoutResponse updateWorkout(@PathVariable Long id, @RequestBody WorkoutRequest workoutRequest, Principal principal){
+    public WorkoutResponse updateWorkout(@PathVariable Long id, @RequestBody @Valid WorkoutRequest workoutRequest, Principal principal){
         return new WorkoutResponse(workoutService.update(id, workoutRequest.asEntity(), principal));
     }
 

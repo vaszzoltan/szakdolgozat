@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,13 +37,13 @@ public class ExerciseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExerciseResponse addExercise(@RequestBody ExerciseRequest exerciseRequest, Principal principal){
+    public ExerciseResponse addExercise(@RequestBody @Valid ExerciseRequest exerciseRequest, Principal principal){
         return new ExerciseResponse(exerciseService.save(exerciseRequest.asEntity(principal)));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseResponse updateExercise(@PathVariable Long id, @RequestBody ExerciseRequest exerciseRequest, Principal principal){
+    public ExerciseResponse updateExercise(@PathVariable Long id, @RequestBody @Valid ExerciseRequest exerciseRequest, Principal principal){
         return new ExerciseResponse(exerciseService.update(id, exerciseRequest.asEntity(), principal));
     }
 

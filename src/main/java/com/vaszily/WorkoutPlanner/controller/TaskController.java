@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +36,13 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskResponse addTask(@RequestBody TaskRequest exerciseRequest, Principal principal){
+    public TaskResponse addTask(@RequestBody @Valid TaskRequest exerciseRequest, Principal principal){
         return new TaskResponse(taskService.save(exerciseRequest.asEntity(principal)));
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTask(@PathVariable Long id, @RequestBody TaskRequest exerciseRequest, Principal principal){
+    public TaskResponse updateTask(@PathVariable Long id, @RequestBody @Valid TaskRequest exerciseRequest, Principal principal){
         return new TaskResponse(taskService.update(id, exerciseRequest.asEntity(), principal));
     }
 
