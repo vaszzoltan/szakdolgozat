@@ -39,7 +39,7 @@ public class TaskService implements EntityService<Task> {
 
     @Override
     public Task getById(Long id) {
-        Task task = taskRepo.findById(id).orElseThrow(EntityExistsException::new);
+        Task task = taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("This task does not exist! ID: "+ id));
         return task;
     }
 
@@ -57,7 +57,7 @@ public class TaskService implements EntityService<Task> {
 
     @Override
     public Task update(Long id, Task task, Principal principal) {
-        Task toUpdate = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Task toUpdate = getById(id);
         if(!toUpdate.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this task! Different creator!");
         toUpdate.setComment(task.getComment());
@@ -82,7 +82,7 @@ public class TaskService implements EntityService<Task> {
     @Override
     @Transactional
     public void delete(Long id, Principal principal) {
-        Task toDelete = taskRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Task toDelete = getById(id);
         if(!toDelete.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't delete this task! Different creator!");
         for(ExerciseWrapper e : toDelete.getExerciseWrappers()){

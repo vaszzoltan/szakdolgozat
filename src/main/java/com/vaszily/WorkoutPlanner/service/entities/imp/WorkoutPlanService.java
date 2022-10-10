@@ -42,7 +42,7 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
 
     @Override
     public WorkoutPlan getById(Long Id) {
-        return workoutPlanRepo.findById(Id).orElseThrow(EntityNotFoundException::new);
+        return workoutPlanRepo.findById(Id).orElseThrow(() -> new EntityNotFoundException("This workoutplan does not exist! ID: "+ Id));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
 
     @Override
     public WorkoutPlan update(Long id, WorkoutPlan workoutPlan, Principal principal) {
-        WorkoutPlan toUpdate = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        WorkoutPlan toUpdate = getById(id);
         if(!toUpdate.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
         toUpdate.setAccounts(workoutPlan.getAccounts());
@@ -83,7 +83,7 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     @Override
     @Transactional
     public void delete(Long id, Principal principal) {
-        WorkoutPlan toDelete = workoutPlanRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        WorkoutPlan toDelete = getById(id);
         if(!toDelete.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
         for(Workout w : toDelete.getWorkouts()){

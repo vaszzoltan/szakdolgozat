@@ -38,7 +38,7 @@ public class WorkoutService implements EntityService<Workout> {
 
     @Override
     public Workout getById(Long Id) {
-        return workoutRepo.findById(Id).orElseThrow(EntityNotFoundException::new);
+        return workoutRepo.findById(Id).orElseThrow(() -> new EntityNotFoundException("This workout does not exist! ID: "+ Id));
     }
 
     @Transactional
@@ -69,7 +69,7 @@ public class WorkoutService implements EntityService<Workout> {
 
     @Override
     public Workout update(Long id, Workout workout, Principal principal) {
-        Workout toUpdate = workoutRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Workout toUpdate = getById(id);
         if(!toUpdate.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this workout! Different creator!");
         toUpdate.setName(workout.getName());
@@ -82,13 +82,7 @@ public class WorkoutService implements EntityService<Workout> {
         toUpdate.setWorkoutPlans(workout.getWorkoutPlans());
         return workoutRepo.save(toUpdate);
     }
-    /*private List<Account> getAccountsByDummies(List<Account> dummies){
-        List<Account> toRet = new ArrayList<>();
-        for(Account a : dummies){
-            toRet.add(accountService.getByUserName(a.getUsername()));
-        }
-        return toRet;
-    }*/
+
     private List<Task> getTasksByDummies(List<Task> dummies){
         List <Task> toRet = new ArrayList<>();
         for(Task t : dummies){
@@ -99,7 +93,7 @@ public class WorkoutService implements EntityService<Workout> {
 
     @Override
     public void delete(Long id, Principal principal) {
-        Workout toDelete = workoutRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Workout toDelete = getById(id);
         if(!toDelete.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't delete this workout! Different creator!");
         for(Task t : toDelete.getTasks()){

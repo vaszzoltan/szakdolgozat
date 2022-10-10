@@ -8,6 +8,7 @@ import com.vaszily.WorkoutPlanner.service.entities.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ExerciseService implements EntityService<Exercise> {
 
     @Override
     public Exercise getById(Long id) {
-        return exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        return exerciseRepo.findById(id).orElseThrow(() -> new EntityExistsException("This exercise does not exist! ID: "+ id));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class ExerciseService implements EntityService<Exercise> {
 
     @Override
     public Exercise update(Long id, Exercise exercise, Principal principal) {
-        Exercise toUpdate = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Exercise toUpdate = getById(id);
         if(!toUpdate.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this exercise! Different creator!");
         toUpdate.update(exercise);
@@ -53,7 +54,7 @@ public class ExerciseService implements EntityService<Exercise> {
 
     @Override
     public void delete(Long id, Principal principal) {
-        Exercise toDelete = exerciseRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        Exercise toDelete = getById(id);
         if(toDelete.getExerciseWrappers().size()>0)
             throw new ReferencedEntityException("This excersice used by at least a exercise wrapper!");
         if(!toDelete.getCreatedBy().equals(principal.getName()))

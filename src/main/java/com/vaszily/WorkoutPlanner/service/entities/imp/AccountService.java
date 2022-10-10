@@ -43,11 +43,12 @@ public class AccountService implements IAccountService {
     public Account save(Account toSave) {
         Authorities authorities = new Authorities();
         authorities.setUsername(toSave);
-        authorities.setAuthority("ROLE_WRITE");
+        Account account = accountRepo.save(toSave);
+        authorities.setAuthority("WRITE");
         authoritiesRepo.save(authorities);
-        authorities.setAuthority("ROLE_READ");
+        authorities.setAuthority("READ");
         authoritiesRepo.save(authorities);
-        return accountRepo.save(toSave);
+        return account;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
 
     @Override
     public ExerciseWrapper getById(Long id) {
-        return exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        return exerciseWrapperRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("This exercisewrapper does not exist! ID: "+ id));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
 
     @Override
     public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper, Principal principal) {
-        ExerciseWrapper toUpdate = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        ExerciseWrapper toUpdate = getById(id);
         if(!toUpdate.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't update this exercise! Different creator!");
         exerciseWrapper.setExercise(exerciseService.getById(exerciseWrapper.getExercise().getId()));
@@ -56,7 +56,7 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
 
     @Override
     public void delete(Long id, Principal principal) {
-        ExerciseWrapper toDelete = exerciseWrapperRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+        ExerciseWrapper toDelete = getById(id);
         if(!toDelete.getCreatedBy().equals(principal.getName()))
             throw new MissingAuthorityException("Can't delete this exercise wrapper! Different creator!");
         exerciseWrapperRepo.delete(toDelete);
