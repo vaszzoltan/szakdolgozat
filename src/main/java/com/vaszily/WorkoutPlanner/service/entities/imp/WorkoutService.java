@@ -6,16 +6,19 @@ import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 @Service
 public class WorkoutService implements EntityService<Workout> {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private final WorkoutRepo workoutRepo;
     private final TaskService taskService;
     private final AccountService accountService;
@@ -38,7 +41,7 @@ public class WorkoutService implements EntityService<Workout> {
 
     @Override
     public Workout getById(Long Id) {
-        return workoutRepo.findById(Id).orElseThrow(() -> new EntityNotFoundException("This workout does not exist! ID: "+ Id));
+        return workoutRepo.findById(Id).orElseThrow(() -> new EntityExistsException("This workout does not exist! ID: "+ Id));
     }
 
     @Transactional
@@ -70,8 +73,10 @@ public class WorkoutService implements EntityService<Workout> {
     @Override
     public Workout update(Long id, Workout workout, Principal principal) {
         Workout toUpdate = getById(id);
-        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+        if(!toUpdate.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to update an workout!");
             throw new MissingAuthorityException("Can't update this workout! Different creator!");
+        }
         toUpdate.setName(workout.getName());
         toUpdate.setAccounts(workout.getAccounts());
         toUpdate.setAfterEffect(workout.getAfterEffect());
@@ -94,8 +99,10 @@ public class WorkoutService implements EntityService<Workout> {
     @Override
     public void delete(Long id, Principal principal) {
         Workout toDelete = getById(id);
-        if(!toDelete.getCreatedBy().equals(principal.getName()))
+        if(!toDelete.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to delete an workout!");
             throw new MissingAuthorityException("Can't delete this workout! Different creator!");
+        }
         for(Task t : toDelete.getTasks()){
             taskService.delete(t.getId(), principal);
         }

@@ -4,14 +4,17 @@ import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseWrapperRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.util.List;
 @Service
 public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private final ExerciseWrapperRepo exerciseWrapperRepo;
     private final ExerciseService exerciseService;
 
@@ -33,7 +36,7 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
 
     @Override
     public ExerciseWrapper getById(Long id) {
-        return exerciseWrapperRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("This exercisewrapper does not exist! ID: "+ id));
+        return exerciseWrapperRepo.findById(id).orElseThrow(() -> new EntityExistsException("This exercisewrapper does not exist! ID: "+ id));
     }
 
     @Override
@@ -45,8 +48,10 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     @Override
     public ExerciseWrapper update(Long id, ExerciseWrapper exerciseWrapper, Principal principal) {
         ExerciseWrapper toUpdate = getById(id);
-        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+        if(!toUpdate.getCreatedBy().equals(principal.getName())) {
+            log.info(principal.getName() + " try to update an exercise wrapper!");
             throw new MissingAuthorityException("Can't update this exercise! Different creator!");
+        }
         exerciseWrapper.setExercise(exerciseService.getById(exerciseWrapper.getExercise().getId()));
         toUpdate.update(exerciseWrapper);
         return exerciseWrapperRepo.save(toUpdate);
@@ -57,8 +62,10 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     @Override
     public void delete(Long id, Principal principal) {
         ExerciseWrapper toDelete = getById(id);
-        if(!toDelete.getCreatedBy().equals(principal.getName()))
+        if(!toDelete.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to delete an exercise wrapper!");
             throw new MissingAuthorityException("Can't delete this exercise wrapper! Different creator!");
+        }
         exerciseWrapperRepo.delete(toDelete);
     }
 }

@@ -7,11 +7,13 @@ import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutPlanRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class WorkoutPlanService implements EntityService<WorkoutPlan> {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private final WorkoutPlanRepo workoutPlanRepo;
     private final WorkoutService workoutService;
     private final AccountService accountService;
@@ -42,7 +45,7 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
 
     @Override
     public WorkoutPlan getById(Long Id) {
-        return workoutPlanRepo.findById(Id).orElseThrow(() -> new EntityNotFoundException("This workoutplan does not exist! ID: "+ Id));
+        return workoutPlanRepo.findById(Id).orElseThrow(() -> new EntityExistsException("This workoutplan does not exist! ID: "+ Id));
     }
 
     @Override
@@ -60,8 +63,10 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     @Override
     public WorkoutPlan update(Long id, WorkoutPlan workoutPlan, Principal principal) {
         WorkoutPlan toUpdate = getById(id);
-        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+        if(!toUpdate.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to update an workout plan!");
             throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
+        }
         toUpdate.setAccounts(workoutPlan.getAccounts());
         toUpdate.setComment(workoutPlan.getComment());
         toUpdate.setDescription(workoutPlan.getDescription());
@@ -84,8 +89,10 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     @Transactional
     public void delete(Long id, Principal principal) {
         WorkoutPlan toDelete = getById(id);
-        if(!toDelete.getCreatedBy().equals(principal.getName()))
+        if(!toDelete.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to delete an workout plan!");
             throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
+        }
         for(Workout w : toDelete.getWorkouts()){
             Long deleteId = toDelete.getId();
             w.setWorkoutPlans(w.getWorkoutPlans().stream().filter(a -> a.getId()!=deleteId).collect(Collectors.toSet()));

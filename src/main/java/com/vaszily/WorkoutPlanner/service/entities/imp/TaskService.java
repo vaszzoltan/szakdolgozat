@@ -5,12 +5,14 @@ import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.repositories.TaskRepo;
 import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
+
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @Service
 public class TaskService implements EntityService<Task> {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private final TaskRepo taskRepo;
     private final ExerciseWrapperService exerciseWrapperService;
 
@@ -39,7 +42,7 @@ public class TaskService implements EntityService<Task> {
 
     @Override
     public Task getById(Long id) {
-        Task task = taskRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("This task does not exist! ID: "+ id));
+        Task task = taskRepo.findById(id).orElseThrow(() -> new EntityExistsException("This task does not exist! ID: "+ id));
         return task;
     }
 
@@ -58,13 +61,14 @@ public class TaskService implements EntityService<Task> {
     @Override
     public Task update(Long id, Task task, Principal principal) {
         Task toUpdate = getById(id);
-        if(!toUpdate.getCreatedBy().equals(principal.getName()))
+        if(!toUpdate.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to update an task!");
             throw new MissingAuthorityException("Can't update this task! Different creator!");
+        }
         toUpdate.setComment(task.getComment());
         toUpdate.setDone(task.getDone());
         if(task.getExerciseWrappers()==null ||task.getExerciseWrappers().size()==0) throw new RuntimeException("Exercisewrapper cannot be null or empty!");
         toUpdate.setExerciseWrappers(getExerciseWrappersByDummies(task.getExerciseWrappers(), toUpdate));
-        //if(task.getWorkout()==null) throw new RuntimeException("Workout cannot be null!");
         toUpdate.setWorkout(task.getWorkout());
         toUpdate.setName(task.getName());
         return taskRepo.saveAndFlush(toUpdate);
@@ -83,8 +87,10 @@ public class TaskService implements EntityService<Task> {
     @Transactional
     public void delete(Long id, Principal principal) {
         Task toDelete = getById(id);
-        if(!toDelete.getCreatedBy().equals(principal.getName()))
+        if(!toDelete.getCreatedBy().equals(principal.getName())){
+            log.info(principal.getName() + " try to delete an task!");
             throw new MissingAuthorityException("Can't delete this task! Different creator!");
+        }
         for(ExerciseWrapper e : toDelete.getExerciseWrappers()){
             e.setTask(null);
             exerciseWrapperService.save(e);
