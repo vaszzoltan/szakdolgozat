@@ -30,13 +30,9 @@ public class AccountService implements IAccountService {
 
 
     public Account getByUserName(String username) {
-        return accountRepo.findByUsername(username).orElseThrow(EntityExistsException::new);
+        return accountRepo.findById(username).orElseThrow(EntityExistsException::new);
     }
 
-    @Override
-    public Account getById(Long Id) {
-        return accountRepo.findById(Id).orElseThrow(EntityExistsException::new);
-    }
 
     @Override
     @Transactional
@@ -52,8 +48,8 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Account update(Long id, Account toUpdate) {
-        Account account = getById(id);
+    public Account update(String username, Account toUpdate) {
+        Account account = getByUserName(username);
         account.setUsername(toUpdate.getUsername());
         account.setWorkouts(toUpdate.getWorkouts());
         account.setWorkoutPlans(toUpdate.getWorkoutPlans());
@@ -61,7 +57,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public void delete(Long id) {
-        accountRepo.delete(getById(id));
+    public void delete(String username) {
+        accountRepo.delete(getByUserName(username));
     }
 }

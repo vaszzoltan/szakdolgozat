@@ -4,7 +4,7 @@ import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.repositories.TaskRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TaskService implements EntityService<Task> {
+public class TaskService implements IEntityService<Task> {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private final TaskRepo taskRepo;
     private final ExerciseWrapperService exerciseWrapperService;
@@ -35,10 +35,6 @@ public class TaskService implements EntityService<Task> {
         return taskRepo.findAll();
     }
 
-    @Override
-    public List<Task> getAllByName(String name) {
-        return taskRepo.findAllByName(name);
-    }
 
     @Override
     public Task getById(Long id) {
@@ -66,7 +62,7 @@ public class TaskService implements EntityService<Task> {
             throw new MissingAuthorityException("Can't update this task! Different creator!");
         }
         toUpdate.setComment(task.getComment());
-        toUpdate.setDone(task.getDone());
+        //toUpdate.setIsDone(task.getIsDone());
         if(task.getExerciseWrappers()==null ||task.getExerciseWrappers().size()==0) throw new RuntimeException("Exercisewrapper cannot be null or empty!");
         toUpdate.setExerciseWrappers(getExerciseWrappersByDummies(task.getExerciseWrappers(), toUpdate));
         toUpdate.setWorkout(task.getWorkout());

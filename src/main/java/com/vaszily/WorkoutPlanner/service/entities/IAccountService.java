@@ -7,8 +7,7 @@ import java.util.List;
 public interface IAccountService {
     List<Account> getAll();
     Account getByUserName(String name);
-    Account getById(Long Id);
     Account save(Account toSave);
-    Account update(Long id, Account toUpdate);
-    void delete(Long id);
+    Account update(String username, Account toUpdate);
+    void delete(String username);
 }

@@ -10,10 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.security.Principal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 @Getter
@@ -37,15 +35,15 @@ public class WorkoutRequest {
         if(tasks.size()==0)
             throw new DataUploadException("Tasks size cannot be less than 1!");
         workout.setTasks(tasks.stream().map(Task::new).collect(Collectors.toList()));
-        workout.setWorkoutPlans(new HashSet<>());
+        workout.setWorkoutPlans(new ArrayList<>());
         workout.setAccounts(new ArrayList<>());
-        try {
+        /*try {
             workout.setGoalDate(sdf.parse(goalDate));
             workout.setFinishDate(sdf.parse(finishDate));
         } catch (ParseException e) {
             e.printStackTrace();
             throw new RuntimeException("Wrong date format!");
-        }
+        }*/
         workout.setDescription(description);
         workout.setAfterEffect(afterEffect);
         workout.setCreatedBy(principal.getName());
@@ -59,15 +57,15 @@ public class WorkoutRequest {
         if (tasks.size() == 0)
             throw new DataUploadException("Tasks size cannot be less than 1!");
         workout.setTasks(tasks.stream().map(Task::new).collect(Collectors.toList()));
-        workout.setWorkoutPlans(new HashSet<>());
+        workout.setWorkoutPlans(new ArrayList<>());
         workout.setAccounts(new ArrayList<>());
-        try {
+        /*try {
             workout.setGoalDate(sdf.parse(goalDate));
             workout.setFinishDate(sdf.parse(finishDate));
         } catch (ParseException e) {
             e.printStackTrace();
             throw new RuntimeException("Wrong date format!");
-        }
+        }*/
         workout.setDescription(description);
         workout.setAfterEffect(afterEffect);
         return workout;

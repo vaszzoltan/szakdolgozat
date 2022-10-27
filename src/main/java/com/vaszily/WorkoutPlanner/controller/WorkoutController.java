@@ -25,6 +25,13 @@ public class WorkoutController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<WorkoutResponse> getAll(){
+        /*List<Workout> workouts = workoutService.getAll();
+        List<WorkoutResponse> workoutResponses = new ArrayList<>();
+        for(Workout w : workouts){
+            workoutResponses.add(new WorkoutResponse(w));
+        }
+        return workoutResponses;*/
+
         return workoutService.getAll().stream().map(WorkoutResponse::new).collect(Collectors.toList());
     }
 

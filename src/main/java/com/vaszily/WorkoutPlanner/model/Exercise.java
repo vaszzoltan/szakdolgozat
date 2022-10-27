@@ -15,7 +15,7 @@ import java.util.List;
 public class Exercise extends BaseEntity{
     private String name;
     private Boolean repeatable;
-    @OneToMany(mappedBy = "exercise")
+    @OneToMany(mappedBy = "exercise" )
     private List<ExerciseWrapper> exerciseWrappers;
 
     public Exercise(Long id) {

@@ -5,9 +5,8 @@ import com.vaszily.WorkoutPlanner.model.BaseEntity;
 import java.security.Principal;
 import java.util.List;
 
-public interface EntityService<T extends BaseEntity> {
+public interface IEntityService<T extends BaseEntity> {
     List<T> getAll();
-    List<T> getAllByName(String name);
     T getById(Long Id);
     T save(T toSave);
     T update(Long id, T toUpdate, Principal principal);

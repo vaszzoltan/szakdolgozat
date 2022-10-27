@@ -21,11 +21,11 @@ public class Workout extends BaseEntity{
     @OneToMany(mappedBy ="workout")
     private List<Task> tasks;
     @ManyToMany
-    private Set<WorkoutPlan> workoutPlans;
+    private List<WorkoutPlan> workoutPlans;
     @ManyToMany
     private List<Account> accounts;
-    private Date goalDate;
-    private Date finishDate;
+    /*private Date goalDate;
+    private Date finishDate;*/
     private String description;
     private String afterEffect;
 
@@ -38,8 +38,8 @@ public class Workout extends BaseEntity{
         this.tasks.addAll(w.getTasks());
         this.workoutPlans.addAll(w.getWorkoutPlans());
         this.accounts.addAll(accounts);
-        this.goalDate = w.getGoalDate();
-        this.finishDate = w.getFinishDate();
+        /*this.goalDate = w.getGoalDate();
+        this.finishDate = w.getFinishDate();*/
         this.description = w.getDescription();
         this.afterEffect = w.getAfterEffect();
     }

@@ -4,7 +4,7 @@ import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.exception.ReferencedEntityException;
 import com.vaszily.WorkoutPlanner.model.Exercise;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,10 @@ import java.security.Principal;
 import java.util.List;;
 
 @Service
-public class ExerciseService implements EntityService<Exercise> {
+public class ExerciseService implements IEntityService<Exercise> {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private ExerciseRepo exerciseRepo;
+    private final ExerciseRepo exerciseRepo;
     @Autowired
     public ExerciseService(ExerciseRepo exerciseRepo){
         this.exerciseRepo = exerciseRepo;
@@ -27,11 +27,6 @@ public class ExerciseService implements EntityService<Exercise> {
     @Override
     public List<Exercise> getAll() {
         return exerciseRepo.findAll();
-    }
-
-    @Override
-    public List<Exercise> getAllByName(String name) {
-        throw new RuntimeException();
     }
 
     @Override

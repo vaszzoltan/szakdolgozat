@@ -5,7 +5,7 @@ import com.vaszily.WorkoutPlanner.model.Task;
 import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 @Service
-public class WorkoutService implements EntityService<Workout> {
+public class WorkoutService implements IEntityService<Workout> {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private final WorkoutRepo workoutRepo;
     private final TaskService taskService;
@@ -32,11 +32,6 @@ public class WorkoutService implements EntityService<Workout> {
     @Override
     public List<Workout> getAll() {
         return workoutRepo.findAll();
-    }
-
-    @Override
-    public List<Workout> getAllByName(String name) {
-        return workoutRepo.findAllByName(name);
     }
 
     @Override
@@ -81,8 +76,8 @@ public class WorkoutService implements EntityService<Workout> {
         toUpdate.setAccounts(workout.getAccounts());
         toUpdate.setAfterEffect(workout.getAfterEffect());
         toUpdate.setDescription(workout.getDescription());
-        toUpdate.setFinishDate(workout.getFinishDate());
-        toUpdate.setGoalDate(workout.getGoalDate());
+        /*toUpdate.setFinishDate(workout.getFinishDate());
+        toUpdate.setGoalDate(workout.getGoalDate());*/
         toUpdate.setTasks(getTasksByDummies(workout.getTasks()));
         toUpdate.setWorkoutPlans(workout.getWorkoutPlans());
         return workoutRepo.save(toUpdate);

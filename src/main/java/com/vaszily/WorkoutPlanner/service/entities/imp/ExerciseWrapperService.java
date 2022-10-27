@@ -3,7 +3,7 @@ package com.vaszily.WorkoutPlanner.service.entities.imp;
 import com.vaszily.WorkoutPlanner.exception.MissingAuthorityException;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.repositories.ExerciseWrapperRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import javax.persistence.EntityExistsException;
 import java.security.Principal;
 import java.util.List;
 @Service
-public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
+public class ExerciseWrapperService implements IEntityService<ExerciseWrapper> {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private final ExerciseWrapperRepo exerciseWrapperRepo;
     private final ExerciseService exerciseService;
@@ -30,13 +30,8 @@ public class ExerciseWrapperService implements EntityService<ExerciseWrapper> {
     }
 
     @Override
-    public List<ExerciseWrapper> getAllByName(String name) {
-        throw new RuntimeException();
-    }
-
-    @Override
     public ExerciseWrapper getById(Long id) {
-        return exerciseWrapperRepo.findById(id).orElseThrow(() -> new EntityExistsException("This exercisewrapper does not exist! ID: "+ id));
+            return exerciseWrapperRepo.findById(id).orElseThrow(() -> new EntityExistsException("This exercisewrapper does not exist! ID: "+ id));
     }
 
     @Override

@@ -13,13 +13,13 @@ public class TaskResponse {
     private String name;
     private List<ExerciseWrapperResponse> exerciseResponses;
     private String comment;
-    private Boolean done;
+    //private Boolean done;
 
     public TaskResponse(Task task){
         this.id = task.getId();
         this.name = task.getName();
         this.exerciseResponses = task.getExerciseWrappers().stream().map(ExerciseWrapperResponse::new).collect(Collectors.toList());
         this.comment = task.getComment();
-        this.done = task.getDone();
+        //this.done = task.getIsDone();
     }
 }

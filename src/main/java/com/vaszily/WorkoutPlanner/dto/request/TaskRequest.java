@@ -3,14 +3,11 @@ package com.vaszily.WorkoutPlanner.dto.request;
 import com.vaszily.WorkoutPlanner.exception.DataUploadException;
 import com.vaszily.WorkoutPlanner.model.ExerciseWrapper;
 import com.vaszily.WorkoutPlanner.model.Task;
-import com.vaszily.WorkoutPlanner.model.Workout;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,10 +19,9 @@ public class TaskRequest {
     private String name;
     @NotNull(message = "Exercises wrappers cannot be null!")
     private Set<Long> exerciseWrappers;
-    //private Long workout;
     private String comment;
-    @NotNull
-    private Boolean done;
+    //@NotNull
+    //private Boolean done;
 
     public Task asEntity(Principal principal){
         Task task = new Task();
@@ -36,7 +32,7 @@ public class TaskRequest {
         //task.setWorkout(new Workout(workout));
         task.setWorkout(null);
         task.setComment(comment);
-        task.setDone(done);
+        //task.setIsDone(done);
         task.setCreatedBy(principal.getName());
         return task;
     }
@@ -50,7 +46,7 @@ public class TaskRequest {
         //task.setWorkout(new Workout(workout));
         task.setWorkout(null);
         task.setComment(comment);
-        task.setDone(done);
+        //task.setIsDone(done);
         return task;
     }
 

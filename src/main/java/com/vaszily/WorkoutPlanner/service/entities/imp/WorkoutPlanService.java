@@ -6,7 +6,7 @@ import com.vaszily.WorkoutPlanner.model.Workout;
 import com.vaszily.WorkoutPlanner.model.WorkoutPlan;
 import com.vaszily.WorkoutPlanner.model.auth.Account;
 import com.vaszily.WorkoutPlanner.repositories.WorkoutPlanRepo;
-import com.vaszily.WorkoutPlanner.service.entities.EntityService;
+import com.vaszily.WorkoutPlanner.service.entities.IEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class WorkoutPlanService implements EntityService<WorkoutPlan> {
+public class WorkoutPlanService implements IEntityService<WorkoutPlan> {
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private final WorkoutPlanRepo workoutPlanRepo;
     private final WorkoutService workoutService;
@@ -36,11 +36,6 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
     @Override
     public List<WorkoutPlan> getAll() {
         return workoutPlanRepo.findAll();
-    }
-
-    @Override
-    public List<WorkoutPlan> getAllByName(String name) {
-        return workoutPlanRepo.findAllByName(name);
     }
 
     @Override
@@ -93,11 +88,21 @@ public class WorkoutPlanService implements EntityService<WorkoutPlan> {
             log.info(principal.getName() + " try to delete an workout plan!");
             throw new MissingAuthorityException("Can't update this workout plan! Different creator!");
         }
-        for(Workout w : toDelete.getWorkouts()){
-            Long deleteId = toDelete.getId();
-            w.setWorkoutPlans(w.getWorkoutPlans().stream().filter(a -> a.getId()!=deleteId).collect(Collectors.toSet()));
-            workoutService.save(w);
-        }
+        toDelete.getWorkouts().forEach(workout -> {
+            workout.setWorkoutPlans(workout.getWorkoutPlans()
+                    .stream().filter(wp -> wp.getId()!= toDelete.getId()).collect(Collectors.toList()));
+            workoutService.save(workout);
+        });
+        /*for(Workout workout : toDelete.getWorkouts()){
+            Set<WorkoutPlan> updatedWorkoutPlanSet = new HashSet<>();
+            for(WorkoutPlan workoutPlan : workout.getWorkoutPlans()){
+                if(workoutPlan.getId()==toDelete.getId())
+                    updatedWorkoutPlanSet.add(workoutPlan);
+            }
+            workout.setWorkoutPlans(updatedWorkoutPlanSet);
+            workoutService.save(workout);
+        }*/
+        
         workoutPlanRepo.delete(toDelete);
     }
     @Transactional
